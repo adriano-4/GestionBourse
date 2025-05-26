@@ -128,8 +128,8 @@
                 <label for="sexe">Sexe</label>
                 <select id="sexe" name="sexe" required>
                     <option value="">Sélectionner</option>
-                    <option value="masculin">Masculin</option>
-                    <option value="feminin">Féminin</option>
+                    <option value="Masculin">Masculin</option>
+                    <option value="Feminin">Féminin</option>
                 </select>
             </div>
 
