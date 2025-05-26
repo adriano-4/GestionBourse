@@ -1,0 +1,79 @@
+.search-container form{
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+form .input-group{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+#modifier_div_flou{
+    background-color: rgba(0,0,0,0.08);
+    backdrop-filter: blur(1.5px);
+    width: 100%;
+    height: 90%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    overflow: hidden;
+    display: none;
+}
+#modifier_div_flou .modifier_div{
+     width: 35%;
+     height: 100%;
+     background-color: white;
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     box-shadow: 5px 0 10px rgba(0, 0, 0, 0.18);
+     display: flex;
+     align-items: center;
+     flex-direction: column;
+     animation: modifier_div 0.5s;
+ }
+@keyframes modifier_div {
+    from{
+        transform: translateX(-500px);
+
+    }
+    to{
+        transform: translateX(0);
+    }
+
+}
+#modifier_div_flou .modifier_div h2{
+    margin-bottom: 50px;
+    color: var(--bleu-marine);
+    margin-top: 80px;
+    font-size: 21px;
+}
+#modifier_div_flou .modifier_div form .input-group input,#modifier_div_flou .modifier_div form .input-group select{
+    width: 270px;
+    height: 30px;
+    padding-left: 10px;
+    font-size: 13px;
+    border: none;
+    border-bottom: 1px solid var(--bleu-marine);
+}
+
+#modifier_div_flou .modifier_div form .input-group label{
+    font-size: 14px ;
+}
+#modifier_div_flou .modifier_div form .bouton_ajouter{
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+#modifier_div_flou .modifier_div form .bouton_ajouter button{
+    width: 110px;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+}

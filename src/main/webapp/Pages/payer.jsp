@@ -7,13 +7,16 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
     <title>payer</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant2.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud2.css">
     <script src="${pageContext.request.contextPath}/script/crudpayer.js?v=1.0"></script>
 </head>
 <body>
@@ -61,26 +64,40 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="payement" items="${payments}">
-        <tr>
-            <td>${payement.matricule}</td>
-            <td>${payement.name}</td>
-            <td>${payement.niveau}</td>
-            <td>${payement.anne_univ}</td>
-            <td>${payement.daty}</td>
-            <td>${payement.nbr_mois}</td>
-            <td>${payement.idequipement}</td>
-            <td>${payement.equipement+(payement.bourse*payement.nbr_mois)} Ar</td>
-            <td class="actions">
-                <button class="btn-edit">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-delete">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </td>
-        </tr>
-        </c:forEach>
+            <c:choose>
+                <c:when test="${empty payments}">
+                    <tr class="empty-table-message">
+                        <td colspan="7">
+                            <div class="empty-message-container">
+                                <i class="fas fa-clipboard-list empty-icon"></i>
+                                <p>Aucune donnée disponible</p>
+                            </div>
+                        </td>
+                    </tr>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="payement" items="${payments}">
+                    <tr>
+                        <td>${payement.matricule}</td>
+                        <td>${payement.name}</td>
+                        <td>${payement.niveau}</td>
+                        <td>${payement.anne_univ}</td>
+                        <td>${payement.daty}</td>
+                        <td>${payement.nbr_mois}</td>
+                        <td>${payement.idequipement}</td>
+                        <td>${payement.equipement+(payement.bourse*payement.nbr_mois)} Ar</td>
+                        <td class="actions">
+                            <button class="btn-edit" onclick="modifier_payer()">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete" onclick="supprimer_payer()">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
         </tbody>
     </table>
 </div>
@@ -89,7 +106,7 @@
         <h2>Ajout de payement</h2>
         <form action="/projetJSP_war_exploded/payements?action=ajouter" method="post">
             <div class="input-group">
-                <label for="idpaye">ID paye</label>
+                <label for="institution">ID paye</label>
                 <input type="number" id="institution" name="idpaye">
             </div>
 
@@ -99,17 +116,17 @@
         </div>
 
         <div class="input-group">
-            <label for="anne_univ">Année universitaire</label>
+            <label for="annee">Année universitaire</label>
             <input type="text" id="annee" name="anne_univ" required>
         </div>
 
         <div class="input-group">
-            <label for="nbr_mois">Nombre de mois</label>
+            <label for="nb_mois">Nombre de mois</label>
             <input type="number" id="nb_mois" name="nbr_mois" required>
         </div>
 
         <div class="input-group">
-            <label for="idequipement">Equipements</label>
+            <label for="equipement">Equipements</label>
             <select name="idequipement" id="equipement" required>
                 <option value="" disabled selected>Choisir un statut</option>
                 <option value="">sans</option>
@@ -130,8 +147,48 @@
         <p>Cet element va être supprimé définitivement</p>
         <div class="btn_supprimer">
             <button id="oui_sup">OUI</button>
-            <button id="non_sup">NON</button>
+            <button id="non_sup" onclick="annuler_supprimer()">NON</button>
         </div>
+    </div>
+</div>
+<div id="modifier_div_flou">
+    <div class="modifier_div">
+        <h2>Modification du payement</h2>
+        <form action="/projetJSP_war_exploded/payements?action=ajouter" method="post">
+            <div class="input-group">
+                <label for="institution">ID paye</label>
+                <input type="number" id="institution_mod" name="idpaye">
+            </div>
+
+            <div class="input-group">
+                <label for="matricule">Matricule</label>
+                <input type="text" id="matricule_mod" name="matricule" required>
+            </div>
+
+            <div class="input-group">
+                <label for="annee">Année universitaire</label>
+                <input type="text" id="annee_mod" name="anne_univ" required>
+            </div>
+
+            <div class="input-group">
+                <label for="nb_mois">Nombre de mois</label>
+                <input type="number" id="nb_mois_mod" name="nbr_mois" required>
+            </div>
+
+            <div class="input-group">
+                <label for="equipement">Equipements</label>
+                <select name="idequipement" id="equipement_mod" required>
+                    <option value="" disabled selected>Choisir un statut</option>
+                    <option value="">sans</option>
+                    <option value="1">avec</option>
+                </select>
+            </div>
+
+            <div class="bouton_ajouter">
+                <button type="reset" class="btn_ann" onclick="annuler_modifier()">Annuler</button>
+                <button type="submit" class="btn_aj">Confirmer</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>

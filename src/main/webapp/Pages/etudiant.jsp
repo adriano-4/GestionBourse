@@ -12,7 +12,9 @@
     <title>etudiant</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant2.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud2.css">
     <script src="${pageContext.request.contextPath}/script/crud.js?v=1.0"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
 
@@ -88,25 +90,39 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="etudiant" items="${etudiants}">
-        <tr>
-            <td>${etudiant.matricule}</td>
-            <td>${etudiant.nom}</td>
-            <td>${etudiant.sexe}</td>
-            <td>${etudiant.datenais}</td>
-            <td>${etudiant.institution}</td>
-            <td>${etudiant.mail}</td>
-            <td>${etudiant.idniv}</td>
-            <td class="actions">
-                <button class="btn-edit">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-delete">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </td>
-        </tr>
-        </c:forEach>
+            <c:choose>
+                <c:when test="${empty etudiants}">
+                    <tr class="empty-table-message">
+                        <td colspan="7">
+                            <div class="empty-message-container">
+                                <i class="fas fa-clipboard-list empty-icon"></i>
+                                <p>Aucune donnée disponible</p>
+                            </div>
+                        </td>
+                    </tr>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="etudiant" items="${etudiants}">
+                    <tr>
+                        <td>${etudiant.matricule}</td>
+                        <td>${etudiant.nom}</td>
+                        <td>${etudiant.sexe}</td>
+                        <td>${etudiant.datenais}</td>
+                        <td>${etudiant.institution}</td>
+                        <td>${etudiant.mail}</td>
+                        <td>${etudiant.idniv}</td>
+                        <td class="actions">
+                            <button class="btn-edit" onclick="modifier_etudiant()">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete" onclick="supprimer_etudiant()">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
         </tbody>
     </table>
 </div>
@@ -181,6 +197,69 @@
             <button id="oui_sup">OUI</button>
             <button id="non_sup">NON</button>
         </div>
+    </div>
+</div>
+<div id="modifier_div_flou">
+    <div class="modifier_div">
+        <h2>Modification d'étudiant</h2>
+        <form  method="post">
+            <div class="input-group">
+                <label for="matricule">Matricule</label>
+                <input type="text" id="matricule_mod" name="matricule" required>
+            </div>
+
+            <div class="input-group">
+                <label for="nom_prenom">Nom et Prénom</label>
+                <input type="text" id="nom_prenom_mod" name="nom" required>
+            </div>
+
+            <div class="input-group">
+                <label for="sexe">Sexe</label>
+                <select id="sexe_mod" name="sexe" required>
+                    <option value="">Sélectionner</option>
+                    <option value="Masculin">Masculin</option>
+                    <option value="Feminin">Féminin</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="date_naissance">Date de Naissance</label>
+                <input type="date" id="date_naissance_mod" name="datenais" required>
+            </div>
+
+            <div class="input-group">
+                <label for="institution">Institution</label>
+                <select id="institution_mod" name="institution" required>
+                    <option value="">Sélectionner</option>
+                    <option value="ENI">ENI</option>
+                    <option value="EMIT">EMIT</option>
+                    <option value="ENS">ENS</option>
+                    <option value="MCI">MCI</option>
+                    <option value="ISTE">ISTE</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="mail">Mail</label>
+                <input type="email" id="mail_mod" name="mail" required>
+            </div>
+
+            <div class="input-group">
+                <label for="niveau">Niveau</label>
+                <select id="niveau_mod" name="idniv" required>
+                    <option value="">Sélectionner</option>
+                    <option value="L1">Licence 1</option>
+                    <option value="L2">Licence 2</option>
+                    <option value="L3">Licence 3</option>
+                    <option value="M1">Master 1</option>
+                    <option value="M2">Master 2</option>
+                </select>
+            </div>
+            <div class="bouton_ajouter">
+                <button type="reset" class="btn_ann">Annuler</button>
+                <button type="submit" class="btn_aj">Confirmer</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>

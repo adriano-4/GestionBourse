@@ -11,9 +11,11 @@
 <head>
     <title>montant</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant2.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud2.css">
     <script src="${pageContext.request.contextPath}/script/crudmontant.js?v=1.0"></script>
 </head>
 <body>
@@ -31,7 +33,6 @@
     </div>
 </header>
 <div class="recherche">
-    <!-- Champ de recherche + bouton -->
     <div class="search-container">
         <button class="ajouter">Ajouter<i class="fa fa-plus"></i></button>
     </div>
@@ -53,22 +54,36 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="montant" items="${montants}">
-        <tr>
-            <td>${montant.idniv}</td>
-            <td>${montant.niveau}</td>
-            <td>${montant.statut}</td>
-            <td>${montant.montant} Ar</td>
-            <td class="actions">
-                <button class="btn-edit">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-delete">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </td>
-        </tr>
-        </c:forEach>
+            <c:choose>
+                <c:when test="${empty montants}">
+                    <tr class="empty-table-message">
+                        <td colspan="7">
+                            <div class="empty-message-container">
+                                <i class="fas fa-clipboard-list empty-icon"></i>
+                                <p>Aucune donnée disponible</p>
+                            </div>
+                        </td>
+                    </tr>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="montant" items="${montants}">
+                    <tr>
+                        <td>${montant.idniv}</td>
+                        <td>${montant.niveau}</td>
+                        <td>${montant.statut}</td>
+                        <td>${montant.montant} Ar</td>
+                        <td class="actions">
+                            <button class="btn-edit" onclick="modifier_montant()">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete" onclick="supprimer_montant()">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
         </tbody>
     </table>
 </div>
@@ -112,9 +127,44 @@
         <h2>Voulez vous vraiment supprimer ce montant ?</h2>
         <p>Cet element va être supprimé définitivement</p>
         <div class="btn_supprimer">
-            <button id="oui_sup">OUI</button>
+            <button id="oui_sup" onclick="annuler_supprimer()">OUI</button>
             <button id="non_sup">NON</button>
         </div>
+    </div>
+</div>
+<div id="modifier_div_flou">
+    <div class="modifier_div">
+        <h2>Modification de montant</h2>
+        <form action="/projetJSP_war_exploded/montants?action=ajouter" method="post">
+            <div class="input-group">
+                <label for="idniv">ID Niveau</label>
+                <input type="text" id="idniv_mod" name="idniv" required>
+            </div>
+
+            <div class="input-group">
+                <label for="niveau">Niveau</label>
+                <input type="text" id="niveau_mod" name="niveau" required>
+            </div>
+
+            <div class="input-group">
+                <label for="statut">Statut</label>
+                <select name="statut" id="statut_mod" required>
+                    <option value="" disabled selected>Choisir un statut</option>
+                    <option value="redoublant">Redoublant</option>
+                    <option value="passant">Passant</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="montant">Montant</label>
+                <input type="text" id="montant_mod" name="montant" required>
+            </div>
+
+            <div class="bouton_ajouter">
+                <button type="reset" class="btn_ann" onclick="annuler_modifier()">Annuler</button>
+                <button type="submit" class="btn_aj">Ajouter</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>

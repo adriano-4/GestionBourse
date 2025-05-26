@@ -1,0 +1,25 @@
+.empty-table-message {
+    text-align: center;
+    height: 150px;
+}
+
+.empty-message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    padding: 20px;
+}
+
+.empty-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+    color: #ccc;
+}
+
+.empty-table-message p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+}

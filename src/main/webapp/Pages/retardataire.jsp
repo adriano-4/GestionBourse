@@ -11,6 +11,7 @@
 <head>
     <title>retardataire</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant2.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
     <script src="${pageContext.request.contextPath}/script/retardataire.js?v=1.0"></script>
@@ -66,17 +67,31 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="retardataire" items="${retardataires}">
-        <tr>
-            <td>${retardataire.matricule}</td>
-            <td>${retardataire.nom}</td>
-            <td>${retardataire.sexe}</td>
-            <td>${retardataire.datenais}</td>
-            <td>${retardataire.institution}</td>
-            <td>${retardataire.mail}</td>
-            <td>${retardataire.idniv}</td>
-        </tr>
-        </c:forEach>
+        <c:choose>
+            <c:when test="${empty retardataires}">
+                <tr class="empty-table-message">
+                    <td colspan="7">
+                        <div class="empty-message-container">
+                            <i class="fas fa-clipboard-list empty-icon"></i>
+                            <p>Aucune donnée disponible</p>
+                        </div>
+                    </td>
+                </tr>
+            </c:when>
+            <c:otherwise>
+                <c:forEach var="retardataire" items="${retardataires}">
+                    <tr>
+                        <td>${retardataire.matricule}</td>
+                        <td>${retardataire.nom}</td>
+                        <td>${retardataire.sexe}</td>
+                        <td>${retardataire.datenais}</td>
+                        <td>${retardataire.institution}</td>
+                        <td>${retardataire.mail}</td>
+                        <td>${retardataire.idniv}</td>
+                    </tr>
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
         </tbody>
     </table>
 </div>
