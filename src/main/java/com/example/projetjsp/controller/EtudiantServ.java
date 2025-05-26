@@ -52,6 +52,18 @@ public class EtudiantServ extends HttpServlet {
             List<Etudiant> listeretard = EtudiantDao.getRetardataires(mois);
             request.setAttribute("retardataires", listeretard);
             request.getRequestDispatcher("/Pages/retardataire.jsp").forward(request, response);
+        }else if (action.equals("rechercher")){
+            String recherche = request.getParameter("recherche");
+            List<Etudiant> listerec = EtudiantDao.getrecherche(recherche);
+            request.setAttribute("recherches", listerec);
+            request.getRequestDispatcher("/Pages/etudiant.jsp").forward(request, response);
+        }else if(action.equals("trier")){
+            String niveau = request.getParameter("niveau");
+            String etab = request.getParameter("etab");
+            String age = request.getParameter("age");
+            List<Etudiant> listetrier = EtudiantDao.trierEtudiant(niveau, etab, age);
+            request.setAttribute("triers", listetrier);
+            request.getRequestDispatcher("/Pages/etudiant.jsp").forward(request, response);
         }
     }
 }

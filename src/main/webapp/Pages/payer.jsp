@@ -90,7 +90,7 @@
         <form action="/projetJSP_war_exploded/payements?action=ajouter" method="post">
             <div class="input-group">
                 <label for="idpaye">ID paye</label>
-                <input type="number" id="institution" name="idpaye">
+                <input type="number" id="institution" name="idpaye" value="0">
             </div>
 
         <div class="input-group">

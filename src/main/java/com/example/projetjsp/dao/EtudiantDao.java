@@ -37,8 +37,58 @@ public class EtudiantDao {
     public static List<Etudiant> getRetardataires(int mois) {
         List<Etudiant> liste = new ArrayList<>();
         try(Connection conn = DBConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT e.matricule, e.nom, e.sexe, e.datenais, e.institution, e.mail, e.idniv FROM etudiant e LEFT JOIN payer p ON e.matricule = p.matricule AND p.anne_univ = '2024-2025' WHERE (p.date IS NULL OR MONTH(p.date) < ?)")){
+            PreparedStatement stmt = conn.prepareStatement("SELECT e.matricule, e.nom, e.sexe, e.datenais, e.institution, e.mail, e.idniv " +
+                    "FROM etudiant e LEFT JOIN payer p ON e.matricule = p.matricule AND p.anne_univ = '2024-2025' WHERE (p.date IS NULL OR MONTH(p.date) < ?)")){
             stmt.setInt(1, mois);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Etudiant e = new Etudiant();
+                e.setMatricule(rs.getString("matricule"));
+                e.setNom(rs.getString("nom"));
+                e.setSexe(rs.getString("sexe"));
+                e.setDatenais(rs.getDate("datenais"));
+                e.setInstitution(rs.getString("institution"));
+                e.setMail(rs.getString("mail"));
+                e.setIdniv(rs.getString("idniv"));
+                liste.add(e);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return liste;
+    }
+    public static  List<Etudiant> getrecherche(String recherche) {
+        List<Etudiant> liste = new ArrayList<>();
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM etudiant WHERE nom LIKE ? OR matricule LIKE ?")){
+            stmt.setString(1, "%"+recherche+"%");
+            stmt.setString(2, "%"+recherche+"%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Etudiant e = new Etudiant();
+                e.setMatricule(rs.getString("matricule"));
+                e.setNom(rs.getString("nom"));
+                e.setSexe(rs.getString("sexe"));
+                e.setDatenais(rs.getDate("datenais"));
+                e.setInstitution(rs.getString("institution"));
+                e.setMail(rs.getString("mail"));
+                e.setIdniv(rs.getString("idniv"));
+                liste.add(e);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return liste;
+    }
+    public static List<Etudiant> trierEtudiant(String niveau,String institution,String age){
+        List<Etudiant> liste = new ArrayList<>();
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT e.matricule, e.nom, e.sexe, e.datenais, e.institution, e.mail, e.idniv " +
+                    "FROM etudiant e, montant m WHERE e.idniv=m.idniv AND (m.niveau LIKE ? OR e.institution LIKE ?)")){
+            stmt.setString(1, "%"+niveau+"%");
+            stmt.setString(2, "%"+institution+"%");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

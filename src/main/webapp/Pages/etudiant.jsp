@@ -35,8 +35,8 @@
 
     <div class="search-container">
         <button class="ajouter">Ajouter<i class="fa fa-plus"></i></button>
-        <form action="" method="post">
-            <input type="text" placeholder="Rechercher un étudiant..." class="search-input">
+        <form action="/projetJSP_war_exploded/etudiants?action=rechercher" method="post">
+            <input  name="recherche" type="text" placeholder="Rechercher un étudiant..." class="search-input">
             <button class="search-btn">
                 <i class="fas fa-search"></i>
             </button>
@@ -44,8 +44,9 @@
     </div>
 
     <div class="search-container2" >
-        <select class="filter-select">
-            <option value="">Tous les niveaux</option>
+        <form action="/projetJSP_war_exploded/etudiants?action=trier" method="post">
+        <select name="niveau" class="filter-select">
+            <option value="none">Tous les niveaux</option>
             <option value="L1">Licence 1</option>
             <option value="L2">Licence 2</option>
             <option value="L3">Licence 3</option>
@@ -53,8 +54,8 @@
             <option value="M2">Master 2</option>
         </select>
 
-        <select class="filter-select">
-            <option value="">Tous les établissements</option>
+        <select name="etab" class="filter-select">
+            <option value="none">Tous les établissements</option>
             <option value="ENI">ENI</option>
             <option value="EMIT">EMIT</option>
             <option value="ENS">ENS</option>
@@ -62,14 +63,15 @@
             <option value="ISTE">ISTE</option>
         </select>
 
-        <select class="filter-select">
-            <option value="">Tous âges</option>
+        <select name="age" class="filter-select">
+            <option value="none">Tous âges</option>
             <option value="-18">Moins de 18 ans</option>
             <option value="+18">Plus de 18 ans</option>
         </select>
         <button>
             Valider
         </button>
+        </form>
     </div>
 
 </div>
@@ -88,25 +90,71 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="etudiant" items="${etudiants}">
-        <tr>
-            <td>${etudiant.matricule}</td>
-            <td>${etudiant.nom}</td>
-            <td>${etudiant.sexe}</td>
-            <td>${etudiant.datenais}</td>
-            <td>${etudiant.institution}</td>
-            <td>${etudiant.mail}</td>
-            <td>${etudiant.idniv}</td>
-            <td class="actions">
-                <button class="btn-edit">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-delete">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </td>
-        </tr>
-        </c:forEach>
+        <c:choose>
+            <c:when test="${not empty recherches}">
+                <c:forEach var="etudiant" items="${recherches}">
+                    <tr>
+                        <td>${etudiant.matricule}</td>
+                        <td>${etudiant.nom}</td>
+                        <td>${etudiant.sexe}</td>
+                        <td>${etudiant.datenais}</td>
+                        <td>${etudiant.institution}</td>
+                        <td>${etudiant.mail}</td>
+                        <td>${etudiant.idniv}</td>
+                        <td class="actions">
+                            <button class="btn-edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </c:when>
+            <c:when test="${not empty triers}">
+                <c:forEach var="etudiant" items="${triers}">
+                    <tr>
+                        <td>${etudiant.matricule}</td>
+                        <td>${etudiant.nom}</td>
+                        <td>${etudiant.sexe}</td>
+                        <td>${etudiant.datenais}</td>
+                        <td>${etudiant.institution}</td>
+                        <td>${etudiant.mail}</td>
+                        <td>${etudiant.idniv}</td>
+                        <td class="actions">
+                            <button class="btn-edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <c:forEach var="etudiant" items="${etudiants}">
+                    <tr>
+                        <td>${etudiant.matricule}</td>
+                        <td>${etudiant.nom}</td>
+                        <td>${etudiant.sexe}</td>
+                        <td>${etudiant.datenais}</td>
+                        <td>${etudiant.institution}</td>
+                        <td>${etudiant.mail}</td>
+                        <td>${etudiant.idniv}</td>
+                        <td class="actions">
+                            <button class="btn-edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
         </tbody>
     </table>
 </div>
@@ -120,7 +168,7 @@
             </div>
 
             <div class="input-group">
-                <label for="nom_prenom">Nom et Prénom</label>
+                <label for="nom">Nom et Prénom</label>
                 <input type="text" id="nom_prenom" name="nom" required>
             </div>
 
