@@ -1,0 +1,123 @@
+:root {
+    --bleu-marine: #004b8d;
+    --jaune-or: #ffb400;
+    --gris-clair: rgba(0, 0, 0, 0.088);
+    --vert: #4d8752;
+    --vert-clair :#98ce57;
+}
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+header{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 200;
+}
+header .titre{
+    color: var(--bleu-marine);
+}
+header .gauche{
+    margin-left: 50px;
+}
+.gauche img{
+    transform: translateY(0px);
+    cursor: pointer;
+}
+header .droite{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-right: 50px;
+}
+.droite #déco {
+
+    font-size: 20px;
+    outline: none;
+    width: 25px;
+    height: 30px;
+    color: rgba(14, 14, 14, 0.599);
+    background-color: var(--gris-clair);
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+    overflow: hidden;
+    border-radius: 20px;
+    padding-right: 20px;
+    padding-left: 10px;
+    border: none;
+    cursor: pointer;
+}
+.droite p{
+    font-size: 13px;
+    color: gray;
+}
+.droite p span{
+    color: black;
+    font-weight: bold;
+}
+.droite #déco i {
+    position: relative;
+    right: 0px;
+    font-size: 14px;
+    width: 10px;
+}
+.droite #déco span {
+    font-size: 13px;
+    position: relative;
+    left: 13px;
+}
+.droite #déco:hover {
+    outline: none;
+    border: none;
+    width: 125px;
+    padding-left: 15px;
+}
+#navigation{
+    width: 90%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+#navigation .nav{
+    margin: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-direction: column;
+    width: 180px;
+    height: 180px;
+    border-radius: 10px;
+    /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.26); */
+    transition: all 0.5s;
+    cursor: pointer;
+}
+.fa-home{
+    position: relative;
+    right: 5px;
+
+}
+#navigation .nav h3{
+    font-size: 14px;
+    color: var(--vert);
+}
+#navigation .nav:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.341);
+}
+#navigation .nav i {
+    color: rgba(58, 112, 63, 0.58);
+    font-size: 40px;
+}
