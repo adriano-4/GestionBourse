@@ -1,0 +1,218 @@
+:root {
+    --bleu-marine: #004b8d;
+    --jaune-or: #ffb400;
+    --gris-clair: rgba(0, 0, 0, 0.088);
+    --vert: #4d8752;
+    --vert-clair :#98ce57;
+    --rouge : red;
+}
+.recherche {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 80;
+}
+.search-container2{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 20px;
+    padding-right: 60px;
+}
+
+.search-container {
+    display: flex;
+    flex: 1;
+    min-width: 250px;
+    max-width: 500px;
+    padding-left: 70px;
+}
+.search-container .ajouter {
+    background-color: var(--vert);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+    margin-right: 20px;
+}
+
+.search-container .ajouter:hover {
+    background-color: color-mix(in srgb, var(--vert), black 15%);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--vert), transparent 60%);
+}
+
+.search-container .ajouter i {
+    font-size: 12px;
+}
+
+.search-input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px 0 0 10px;
+    width: 100%;
+    font-size: 14px;
+}
+
+.search-btn {
+    padding: 0 15px;
+    color: rgba(14, 14, 14, 0.599);
+    background-color: var(--gris-clair);
+    border: none;
+    border-radius: 0 10px 10px 0;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.search-btn:hover {
+    color: rgba(14, 14, 14, 0.75);
+    background-color: rgba(127, 140, 141, 0.37);
+}
+
+.filter-select {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+    font-size: 13px;
+    min-width: 150px;
+    height: 40px;
+}
+.search-container2 button{
+    padding-left: 20px;
+    padding-right: 20px;
+    color: rgba(14, 14, 14, 0.599);
+    background-color: var(--gris-clair);
+    border: none;
+    border-radius: 10px;
+    height: 40px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.search-container2 button:hover {
+    color: rgba(14, 14, 14, 0.75);
+    background-color: rgba(127, 140, 141, 0.37);
+}
+.tableau{
+    width: 100%;
+    height: 75%;
+    position: absolute;
+    bottom: 0;
+    z-index: 80;
+}
+
+.tableau table {
+    width: 90%;
+    margin-left:5%;
+    margin-right:5%;
+    border-collapse: collapse;
+    margin-top: 30px;
+}
+
+.tableau table th, .tableau table td {
+    padding: 12px 15px;
+    text-align: left;
+    height: 35px;
+    font-size: 14px;
+}
+
+.tableau th {
+    border-bottom:1px solid var(--bleu-marine);
+    font-weight: 600;
+    background-color: transparent;
+
+    color: rgba(0, 0, 0, 0.5);
+}
+.tableau td{
+    border-bottom: 1px solid #ddd;
+
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    justify-content: end;
+}
+.action{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.btn-edit, .btn-delete {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.btn-edit {
+    background-color: var(--bleu-marine);
+    color: white;
+    border: 2px solid var(--bleu-marine);
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-edit:hover {
+    background-color: #004078;
+}
+
+.btn-delete {
+    background-color: var(--rouge);
+    color: white;
+    border: 2px solid var(--rouge);
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tableau {
+        font-size: 14px;
+    }
+
+    .btn-edit, .btn-delete {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}

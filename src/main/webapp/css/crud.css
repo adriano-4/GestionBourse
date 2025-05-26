@@ -1,0 +1,174 @@
+#ajouter_div_flou{
+    background-color: rgba(0,0,0,0.08);
+    backdrop-filter: blur(1.5px);
+    width: 100%;
+    height: 90%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    overflow: hidden;
+    display: none;
+}
+#ajouter_div_flou .ajouter_div{
+    width: 35%;
+    height: 100%;
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.18);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    animation: ajouter_div 0.5s;
+}
+@keyframes ajouter_div {
+    from{
+        transform: translateX(-500px);
+
+    }
+    to{
+        transform: translateX(0);
+    }
+
+}
+.ajouter_div h2{
+    margin-bottom: 50px;
+    color: var(--bleu-marine);
+    margin-top: 80px;
+    font-size: 21px;
+}
+.input-group{
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.input-group input, .input-group select{
+    width: 270px;
+    height: 30px;
+    padding-left: 10px;
+    font-size: 13px;
+    border: none;
+    border-bottom: 1px solid var(--bleu-marine);
+}
+
+.input-group label{
+    font-size: 14px ;
+}
+.bouton_ajouter{
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+.bouton_ajouter button{
+    width: 110px;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+}
+.btn_ann{
+    background-color: rgba(119, 119, 119, 0.18);
+    color: #555555;
+}
+.btn_aj{
+    background-color: var(--bleu-marine);
+    color: white;
+}
+.btn_mod{
+    background-color: var(--bleu-marine);
+    color: white;
+}
+#sup_div_flou{
+    background-color: rgba(0,0,0,0.08);
+    backdrop-filter: blur(1.5px);
+    width: 100%;
+    height: 90%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    overflow: hidden;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+ #sup_div_flou .sup_div {
+    width: 400px;
+    height: auto;
+    background-color: white;
+    border-radius: 10px;
+    animation: cont1 0.2s;
+    padding: 20px;
+    padding-top: 0;
+     animation: sup_div 0.3s;
+
+ }
+@keyframes sup_div {
+    from{
+        scale: 0.3;
+    }
+    to{
+        scale: 1;
+    }
+}
+#sup_div_flou .sup_div h2 {
+    font-size: 17px;
+    margin-bottom: 50px;
+    color: var(--bleu-marine);
+}
+#sup_div_flou .sup_div h2 {
+    margin-top: 40px;
+    margin-bottom: 0px;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.675);
+}
+#sup_div_flou .sup_div p {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.523);
+    margin-top: 10px;
+}
+#sup_div_flou .sup_div .btn_supprimer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+#sup_div_flou .sup_div .btn_supprimer button {
+    width: 80px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--rouge);
+    background-color: rgba(255, 0, 0, 0.118);
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+#sup_div_flou .sup_div .btn_supprimer button:hover{
+    background-color: rgba(255, 0, 0, 0.19);
+
+}
+#sup_div_flou .sup_div .btn_supprimer #non_sup {
+    color: rgba(0, 0, 0, 0.567);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+#sup_div_flou .sup_div .btn_supprimer #non_sup:hover{
+    background-color: rgba(0, 0, 0, 0.13);
+
+}
