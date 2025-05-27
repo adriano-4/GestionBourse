@@ -36,6 +36,27 @@ public class PayerDao {
         }
         return liste;
     }
+    public static List<Payer> getPayementsID(int idpaye) {
+        List<Payer> liste = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT p.idpaye,p.anne_univ,p.date as daty,p.nbr_mois,p.matricule,p.idequipement FROM payer WHERE idpaye LIKE ?")){
+            stmt.setInt(1, idpaye);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Payer p = new Payer();
+                p.setIdpaye(rs.getInt("idpaye"));
+                p.setAnne_univ(rs.getString("anne_univ"));
+                p.setDaty(rs.getDate("daty"));
+                p.setNbr_mois(rs.getInt("nbr_mois"));
+                p.setMatricule(rs.getString("matricule"));
+                p.setIdequipement(rs.getInt("idequipement"));
+                liste.add(p);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return liste;
+    }
     public static void ajouterPayement(Payer p) {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement("INSERT INTO payer (anne_univ,date,nbr_mois,matricule,idequipement) VALUES (?, ?, ?, ?, ?)")){

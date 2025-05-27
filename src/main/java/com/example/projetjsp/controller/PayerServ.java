@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Date;
+
+import com.example.projetjsp.dao.MontantDao;
+import com.example.projetjsp.models.Montant;
 import com.example.projetjsp.models.Payer;
 import com.example.projetjsp.dao.PayerDao;
 import javax.servlet.http.HttpServlet;
@@ -16,10 +19,25 @@ import javax.servlet.ServletException;
 public class PayerServ extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+        boolean testsup = false;
+        boolean testmod = false;
 
         if (action == null || action.equals("lister")) {
             List <Payer> liste = PayerDao.getTousPayements();
             request.setAttribute("payments", liste);
+            request.getRequestDispatcher("/Pages/payer.jsp").forward(request, response);
+        }else if (action.equals("modform")){
+            int idpaye = Integer.parseInt(request.getParameter("idpaye"));
+            testmod = true;
+            List<Payer> payer = PayerDao.getPayementsID(idpaye);
+            request.setAttribute("modpayer", payer);
+            request.setAttribute("testmod", testmod);
+            request.getRequestDispatcher("/Pages/payer.jsp").forward(request, response);
+        }else if (action.equals("supform")){
+            int idpaye = Integer.parseInt(request.getParameter("idpaye"));
+            testsup = true;
+            request.setAttribute("idpaye", idpaye);
+            request.setAttribute("testsup", testsup);
             request.getRequestDispatcher("/Pages/payer.jsp").forward(request, response);
         }else if (action.equals("supprimer")) {
             int idpaye = Integer.parseInt(request.getParameter("idpaye"));

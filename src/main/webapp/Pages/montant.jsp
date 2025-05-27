@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud1.css">
     <script src="${pageContext.request.contextPath}/script/crudmontant.js?v=1.0"></script>
 </head>
 <body>
@@ -60,12 +60,16 @@
             <td>${montant.statut}</td>
             <td>${montant.montant} Ar</td>
             <td class="actions">
-                <button class="btn-edit">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-delete">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
+                <a href="/projetJSP_war_exploded/montants?action=modform&idniv=${montant.idniv}">
+                    <button class="btn-edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </a>
+                <a href="/projetJSP_war_exploded/montants?action=supform&idniv=${montant.idniv}">
+                    <button class="btn-delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </a>
             </td>
         </tr>
         </c:forEach>
@@ -107,15 +111,60 @@
         </form>
     </div>
 </div>
-<div id="sup_div_flou">
-    <div class="sup_div">
-        <h2>Voulez vous vraiment supprimer ce montant ?</h2>
-        <p>Cet element va être supprimé définitivement</p>
-        <div class="btn_supprimer">
-            <button id="oui_sup">OUI</button>
-            <button id="non_sup">NON</button>
+<c:if test="${testsup}">
+    <div id="sup_div_flou">
+        <div class="sup_div">
+            <h2>Voulez vous vraiment supprimer cet montants ?</h2>
+            <p>Cet element:${idniv}  va être supprimé définitivement</p>
+            <div class="btn_supprimer">
+                <a href="/projetJSP_war_exploded/montants?action=supprimer&idniv=${idniv}">
+                    <button id="oui_sup">OUI</button>
+                </a>
+                <a href="/projetJSP_war_exploded/montants?action=lister">
+                    <button id="non_sup">NON</button>
+                </a>
+            </div>
         </div>
     </div>
+</c:if>
+<c:if test="${testmod}">
+    <c:forEach var="montant" items="${modmontant}">
+<div id="modifier_div_flou">
+    <div class="modifier_div">
+        <h2>Modification de montant</h2>
+        <form action="/projetJSP_war_exploded/montants?action=ajouter" method="post">
+            <div class="input-group">
+                <label for="idniv">ID Niveau</label>
+                <input type="text" id="idniv_mod" name="idniv" value="${montant.idniv}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="niveau">Niveau</label>
+                <input type="text" id="niveau_mod" name="niveau" value="${montant.niveau}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="statut">Statut</label>
+                <select name="statut" id="statut_mod" required>
+                    <option value="${montant.statut}">${montant.statut}</option>
+                    <option value="redoublant">Redoublant</option>
+                    <option value="passant">Passant</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="montant">Montant</label>
+                <input type="text" id="montant_mod" name="montant" value="${montant.montant}" required>
+            </div>
+
+            <div class="bouton_ajouter">
+                <button type="reset" class="btn_ann">Annuler</button>
+                <button type="submit" class="btn_aj">Ajouter</button>
+            </div>
+        </form>
+    </div>
 </div>
+    </c:forEach>
+</c:if>
 </body>
 </html>

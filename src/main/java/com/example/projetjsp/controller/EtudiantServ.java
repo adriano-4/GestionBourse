@@ -15,9 +15,25 @@ import javax.servlet.ServletException;
 public class EtudiantServ extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+        boolean testsup = false;
+        boolean testmod = false;
+
         if (action == null || action.equals("lister")) {
             List<Etudiant> listeEtudiants = EtudiantDao.getTousEtudiants();
             request.setAttribute("etudiants", listeEtudiants);
+            request.getRequestDispatcher("/Pages/etudiant.jsp").forward(request, response);
+        }else if (action.equals("supform")){
+            String matricule = request.getParameter("matricule");
+            testsup = true;
+            request.setAttribute("matricule", matricule);
+            request.setAttribute("testsup", testsup);
+            request.getRequestDispatcher("/Pages/etudiant.jsp").forward(request, response);
+        }else if (action.equals("modform")){
+            String matricule = request.getParameter("matricule");
+            testmod = true;
+            List<Etudiant> etudiant = EtudiantDao.getEtudiantsID(matricule);
+            request.setAttribute("modetudiant", etudiant);
+            request.setAttribute("testmod", testmod);
             request.getRequestDispatcher("/Pages/etudiant.jsp").forward(request, response);
         }else if(action.equals("supprimer")){
             String matricule = request.getParameter("matricule");

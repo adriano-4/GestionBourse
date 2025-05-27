@@ -12,8 +12,8 @@
     <title>etudiant</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud.css">
-    <script src="${pageContext.request.contextPath}/script/crud.js?v=1.0"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud1.css">
+<%--    <script src="${pageContext.request.contextPath}/script/crud.js?v=1.0"></script>--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
 
 </head>
@@ -102,12 +102,16 @@
                         <td>${etudiant.mail}</td>
                         <td>${etudiant.idniv}</td>
                         <td class="actions">
-                            <button class="btn-edit">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-delete">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
+                            <a href="/projetJSP_war_exploded/etudiants?action=modform&matricule=${etudiant.matricule}">
+                                <button class="btn-edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </a>
+                            <a href="/projetJSP_war_exploded/etudiants?action=supform">
+                                <button class="btn-delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -123,12 +127,16 @@
                         <td>${etudiant.mail}</td>
                         <td>${etudiant.idniv}</td>
                         <td class="actions">
-                            <button class="btn-edit">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-delete">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
+                            <a href="/projetJSP_war_exploded/etudiants?action=modform&matricule=${etudiant.matricule}">
+                                <button class="btn-edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </a>
+                            <a href="/projetJSP_war_exploded/etudiants?action=supform">
+                                <button class="btn-delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -144,12 +152,16 @@
                         <td>${etudiant.mail}</td>
                         <td>${etudiant.idniv}</td>
                         <td class="actions">
-                            <button class="btn-edit">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-delete">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
+                            <a href="/projetJSP_war_exploded/etudiants?action=modform&matricule=${etudiant.matricule}">
+                                <button class="btn-edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </a>
+                            <a href="/projetJSP_war_exploded/etudiants?action=supform&matricule=${etudiant.matricule}">
+                                <button class="btn-delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -221,15 +233,88 @@
         </form>
     </div>
 </div>
-<div id="sup_div_flou">
-    <div class="sup_div">
-        <h2>Voulez vous vraiment supprimer cet étudiant ?</h2>
-        <p>Cet element va être supprimé définitivement</p>
-        <div class="btn_supprimer">
-            <button id="oui_sup">OUI</button>
-            <button id="non_sup">NON</button>
+<c:if test="${testsup}">
+    <div id="sup_div_flou">
+        <div class="sup_div">
+            <h2>Voulez vous vraiment supprimer cet étudiant ?</h2>
+            <p>Cet element:${matricule}  va être supprimé définitivement</p>
+            <div class="btn_supprimer">
+                <a href="/projetJSP_war_exploded/etudiants?action=supprimer&matricule=${matricule}">
+                <button id="oui_sup">OUI</button>
+                </a>
+                <a href="/projetJSP_war_exploded/etudiants?action=lister">
+                <button id="non_sup">NON</button>
+                </a>
+            </div>
         </div>
     </div>
+</c:if>
+<c:if test="${testmod}">
+    <c:forEach var="etudiant" items="${modetudiant}">
+<div id="modifier_div_flou">
+    <div class="modifier_div">
+        <h2>Modification d'étudiant</h2>
+        <form action="/projetJSP_war_exploded/etudiants?action=modifier" method="post">
+            <div class="input-group">
+                <label for="matricule">Matricule</label>
+                <input type="text" id="matricule_mod" name="matricule" value="${etudiant.matricule}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="nom_prenom">Nom et Prénom</label>
+                <input type="text" id="nom_prenom_mod" name="nom" value="${etudiant.nom}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="sexe">Sexe</label>
+                <select id="sexe_mod" name="sexe" required>
+                    <option value="${etudiant.sexe}">${etudiant.sexe}</option>
+                    <option value="Masculin">Masculin</option>
+                    <option value="Feminin">Féminin</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="date_naissance">Date de Naissance</label>
+                <input type="date" id="date_naissance_mod" name="datenais" value="${etudiant.datenais}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="institution">Institution</label>
+                <select id="institution_mod" name="institution" required>
+                    <option value="${etudiant.institution}">${etudiant.institution}</option>
+                    <option value="ENI">ENI</option>
+                    <option value="EMIT">EMIT</option>
+                    <option value="ENS">ENS</option>
+                    <option value="MCI">MCI</option>
+                    <option value="ISTE">ISTE</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="mail">Mail</label>
+                <input type="email" id="mail_mod" name="mail" value="${etudiant.mail}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="niveau">Niveau</label>
+                <select id="niveau_mod" name="idniv" required>
+                    <option value="${etudiant.idniv}">${etudiant.idniv}</option>
+                    <option value="L1">Licence 1</option>
+                    <option value="L2">Licence 2</option>
+                    <option value="L3">Licence 3</option>
+                    <option value="M1">Master 1</option>
+                    <option value="M2">Master 2</option>
+                </select>
+            </div>
+            <div class="bouton_ajouter">
+                <button type="reset" class="btn_ann">Annuler</button>
+                <button type="submit" class="btn_aj">Confirmer</button>
+            </div>
+        </form>
+    </div>
 </div>
+    </c:forEach>
+</c:if>
 </body>
 </html>

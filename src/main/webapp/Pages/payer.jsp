@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud.css">
-    <script src="${pageContext.request.contextPath}/script/crudpayer.js?v=1.0"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud1.css">
+<%--    <script src="${pageContext.request.contextPath}/script/crudpayer.js?v=1.0"></script>--%>
 </head>
 <body>
 <header>
@@ -72,12 +72,16 @@
             <td>${payement.idequipement}</td>
             <td>${payement.equipement+(payement.bourse*payement.nbr_mois)} Ar</td>
             <td class="actions">
-                <button class="btn-edit">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-delete">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
+                <a href="/projetJSP_war_exploded/payements?action=modform&idpaye=${payement.idpaye}">
+                    <button class="btn-edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </a>
+                <a href="/projetJSP_war_exploded/payements?action=supform&idpaye=${payement.idpaye}">
+                    <button class="btn-delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </a>
             </td>
         </tr>
         </c:forEach>
@@ -111,7 +115,7 @@
         <div class="input-group">
             <label for="idequipement">Equipements</label>
             <select name="idequipement" id="equipement" required>
-                <option value="" disabled selected>Choisir un statut</option>
+                <option value="" disabled selected>Selectionner option</option>
                 <option value="">sans</option>
                 <option value="1">avec</option>
             </select>
@@ -124,15 +128,71 @@
         </form>
     </div>
 </div>
-<div id="sup_div_flou">
-    <div class="sup_div">
-        <h2>Voulez vous vraiment supprimer ce payement ?</h2>
-        <p>Cet element va être supprimé définitivement</p>
-        <div class="btn_supprimer">
-            <button id="oui_sup">OUI</button>
-            <button id="non_sup">NON</button>
+<c:if test="${testsup}">
+    <div id="sup_div_flou">
+        <div class="sup_div">
+            <h2>Voulez vous vraiment supprimer cet payements ?</h2>
+            <p>Cet element:${idpaye}  va être supprimé définitivement</p>
+            <div class="btn_supprimer">
+                <a href="/projetJSP_war_exploded/payements?action=supprimer&idpaye=${idpaye}">
+                    <button id="oui_sup">OUI</button>
+                </a>
+                <a href="/projetJSP_war_exploded/payements?action=lister">
+                    <button id="non_sup">NON</button>
+                </a>
+            </div>
         </div>
     </div>
+</c:if>
+<c:if test="${testmod}">
+    <c:forEach var="payer" items="${modpayer}">
+<div id="modifier_div_flou">
+    <div class="modifier_div">
+        <h2>Modification du payement</h2>
+        <form action="/projetJSP_war_exploded/payements?action=modifier" method="post">
+            <div class="input-group">
+                <label for="institution">ID paye</label>
+                <input type="number" id="institution_mod" name="idpaye" value="${payer.idpaye}">
+            </div>
+
+            <div class="input-group">
+                <label for="matricule">Matricule</label>
+                <input type="text" id="matricule_mod" name="matricule" value="${payer.matricule}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="annee">Année universitaire</label>
+                <input type="text" id="annee_mod" name="anne_univ" value="${payer.anne_univ}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="daty">Date Payement</label>
+                <input type="text" id="annee" name="daty" value="${payer.daty}" required>
+            </div>
+
+
+            <div class="input-group">
+                <label for="nb_mois">Nombre de mois</label>
+                <input type="number" id="nb_mois_mod" name="nbr_mois" value="${payer.nbr_mois}" required>
+            </div>
+
+            <div class="input-group">
+                <label for="equipement">Equipements</label>
+                <select name="idequipement" id="equipement_mod" required>
+                    <option value="${payer.idequipement}">${payer.idequipement}</option>
+                    <option value="">sans</option>
+                    <option value="1">avec</option>
+                </select>
+            </div>
+
+            <div class="bouton_ajouter">
+                <button type="reset" class="btn_ann">Annuler</button>
+                <button type="submit" class="btn_aj">Confirmer</button>
+            </div>
+        </form>
+    </div>
 </div>
+    </c:forEach>
+</c:if>
 </body>
 </html>

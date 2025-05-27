@@ -30,6 +30,25 @@ public class MontantDao {
         }
         return liste;
     }
+    public static List<Montant> getMontantsID(String idniv){
+        List<Montant> liste = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM montant")){
+            stmt.setString(1, idniv);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Montant m = new Montant();
+                m.setIdniv(rs.getString("idniv"));
+                m.setNiveau(rs.getString("niveau"));
+                m.setStatut(rs.getString("statut"));
+                m.setMontant(rs.getInt("montant"));
+                liste.add(m);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return liste;
+    }
     public static void ajouterMontant(Montant m){
         try (Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO montant VALUES (?, ?, ?, ?)")){
@@ -55,6 +74,13 @@ public class MontantDao {
         }
     }
     public static void supprimerMontant(String idniv){
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("DELETE FROM etudiant WHERE idniv=?")){
+            stmt.setString(1, idniv);
+            stmt.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement("DELETE FROM montant WHERE idniv=?")){
             stmt.setString(1, idniv);
