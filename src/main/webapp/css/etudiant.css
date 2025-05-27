@@ -36,7 +36,7 @@ a {
 .search-container {
     display: flex;
     min-width: 250px;
-    max-width: 500px;
+    max-width: 700px;
     padding-left: 70px;
 }
 .search-container .ajouter {
@@ -46,7 +46,7 @@ a {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 18px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -155,18 +155,6 @@ a {
     display: flex;
     align-items: center;
     justify-content: end;
-}
-
-.btn-edit, .btn-delete {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 14px;
-    transition: all 0.3s;
 }
 
 .btn-edit {

@@ -52,12 +52,6 @@
 #ajouter_div_flou .ajouter_div form .input-group label{
     font-size: 14px ;
 }
-#ajouter_div_flou .ajouter_div form .bouton_ajouter{
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    margin-top: 30px;
-}
 
 #ajouter_div_flou .ajouter_div form .bouton_ajouter button{
     width: 110px;

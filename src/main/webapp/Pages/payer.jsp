@@ -17,7 +17,140 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud2.css">
-    <script src="${pageContext.request.contextPath}/script/crudpayer.js?v=1.0"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud3.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ajouterBtn = document.querySelector('.ajouter');
+            const ajouterDivFlou = document.getElementById('ajouter_div_flou');
+            const modifDivFlou = document.getElementById('modifier_div_flou');
+            const supDivFlou = document.getElementById('sup_div_flou');
+
+            // Ouvrir le popup "Ajouter"
+            if (ajouterBtn && ajouterDivFlou) {
+                ajouterBtn.addEventListener('click', function () {
+                    ajouterDivFlou.style.display = 'flex';
+                });
+            }
+
+            // Fermer tous les popups
+            document.querySelectorAll('.btn_ann').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const parentPopup = btn.closest('.popup, #ajouter_div_flou, #modifier_div_flou, #sup_div_flou');
+                    if (parentPopup) {
+                        parentPopup.style.display = 'none';
+                    }
+                });
+            });
+
+            // Remplissage automatique de l'année universitaire
+            function getAnneeUniversitaire() {
+                const now = new Date();
+                const currentYear = now.getFullYear();
+                const nextYear = currentYear + 1;
+
+                if (now.getMonth() >= 8) {
+                    return `${currentYear}-${nextYear}`;
+                } else {
+                    return `${currentYear - 1}-${currentYear}`;
+                }
+            }
+
+            const anneeInput = document.getElementById('annee');
+            if (anneeInput) {
+                anneeInput.value = getAnneeUniversitaire();
+            }
+
+            // Partie SELECTION D'UNE LIGNE (comme étudiant)
+            let currentAction = null;
+            const infoBox = document.getElementById('info-selection');
+            const actionTypeText = document.getElementById('action-type');
+
+            const editTrigger = document.querySelector('.btn-edit--');
+            const deleteTrigger = document.querySelector('.btn-delete--');
+
+            editTrigger.addEventListener('click', () => {
+                currentAction = "edit";
+                actionTypeText.textContent = "modifier";
+                showInfoBox();
+                highlightRowsForSelection();
+            });
+
+            deleteTrigger.addEventListener('click', () => {
+                currentAction = "delete";
+                actionTypeText.textContent = "supprimer";
+                showInfoBox();
+                highlightRowsForSelection();
+            });
+
+            function showInfoBox() {
+                infoBox.style.display = 'flex';
+            }
+
+            function hideInfoBox() {
+                infoBox.style.display = 'none';
+            }
+
+            function highlightRowsForSelection() {
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    row.style.cursor = 'pointer';
+                    row.classList.add('row-selectable');
+                    row.addEventListener('click', handleRowClick);
+                });
+            }
+
+            function handleRowClick(e) {
+                const row = e.currentTarget;
+
+                document.querySelectorAll('tbody tr').forEach(r => {
+                    r.style.cursor = '';
+                    r.classList.remove('row-selectable');
+                    r.removeEventListener('click', handleRowClick);
+                });
+
+                hideInfoBox();
+
+                const cells = row.querySelectorAll('td');
+                const matricule = cells[0].textContent.trim();
+                const name = cells[1].textContent.trim();
+                const niveau = cells[2].textContent.trim();
+                const anneeUniv = cells[3].textContent.trim();
+                const date = cells[4].textContent.trim(); // non utilisé ici
+                const nbMois = cells[5].textContent.trim();
+                const equipement = cells[6].textContent.trim();
+
+                // NOTE : tu peux ajouter l'id de la ligne dans un <td hidden> si tu en as besoin
+
+                if (currentAction === "edit") {
+                    document.getElementById('matricule_mod').value = matricule;
+                    document.getElementById('annee_mod').value = anneeUniv;
+                    document.getElementById('nb_mois_mod').value = nbMois;
+                    document.getElementById('equipement_mod').value = (equipement === "avec") ? "1" : "";
+
+                    const form = modifDivFlou.querySelector('form');
+                    form.action = `/projetJSP_war_exploded/payements?action=modifier&matricule=${matricule}`;
+
+                    modifDivFlou.style.display = 'flex';
+
+                } else if (currentAction === "delete") {
+                    const ouiSupBtn = document.getElementById('oui_sup');
+                    const nonSupBtn = document.getElementById('non_sup');
+
+                    ouiSupBtn.onclick = () => {
+                        window.location.href = `/projetJSP_war_exploded/payements?action=supprimer&matricule=${matricule}`;
+                    };
+
+                    nonSupBtn.onclick = () => {
+                        supDivFlou.style.display = 'none';
+                    };
+
+                    supDivFlou.style.display = 'flex';
+                }
+
+                currentAction = null;
+            }
+        });
+    </script>
+
 </head>
 <body>
 <header>
@@ -36,9 +169,17 @@
 <div class="recherche">
     <!-- Champ de recherche + bouton -->
     <div class="search-container">
-        <button class="ajouter">Ajouter<i class="fa fa-plus"></i></button>
+        <button class="btn-edit-- btn-edit" id="btn_ed">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn-delete-- btn-delete" id="btn_del">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+        <button class="ajouter">
+            <i class="fa fa-plus"></i>
+        </button>
         <input type="text" placeholder="Rechercher un étudiant..." class="search-input">
-        <button class="search-btn">
+        <button class="search-btn" id="search-btn">
             <i class="fas fa-search"></i>
         </button>
     </div>
@@ -47,6 +188,10 @@
 
     </div>
 
+</div>
+<div id="info-selection" class="info-message" style="display: none;">
+    <i class="fa fa-info-circle"></i>
+    <p>Veuillez sélectionner une ligne à <span id="action-type">modifier</span>.</p>
 </div>
 <div class="tableau">
     <table>
@@ -60,7 +205,6 @@
             <th>Nombre de mois</th>
             <th>Equipement</th>
             <th>Total payer</th>
-            <th class="action">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -86,14 +230,6 @@
                         <td>${payement.nbr_mois}</td>
                         <td>${payement.idequipement}</td>
                         <td>${payement.equipement+(payement.bourse*payement.nbr_mois)} Ar</td>
-                        <td class="actions">
-                            <button class="btn-edit" onclick="modifier_payer()">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-delete" onclick="supprimer_payer()">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </td>
                     </tr>
                     </c:forEach>
                 </c:otherwise>
@@ -147,7 +283,7 @@
         <p>Cet element va être supprimé définitivement</p>
         <div class="btn_supprimer">
             <button id="oui_sup">OUI</button>
-            <button id="non_sup" onclick="annuler_supprimer()">NON</button>
+            <button id="non_sup">NON</button>
         </div>
     </div>
 </div>
@@ -185,7 +321,7 @@
             </div>
 
             <div class="bouton_ajouter">
-                <button type="reset" class="btn_ann" onclick="annuler_modifier()">Annuler</button>
+                <button type="reset" class="btn_ann">Annuler</button>
                 <button type="submit" class="btn_aj">Confirmer</button>
             </div>
         </form>

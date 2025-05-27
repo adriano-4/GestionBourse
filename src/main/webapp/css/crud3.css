@@ -1,0 +1,61 @@
+#info-selection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background-color: #e6f0ff;
+    color: #003366;
+    border: 1px solid #99ccff;
+    height: 60px;
+    border-radius: 8px;
+    margin: 20px auto;
+    width: fit-content;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    position: relative;
+bottom: 260px;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+    animation: info 0.3s;
+    z-index: 200;
+}
+@keyframes info {
+    from{
+        scale: 0.2;
+    }
+    to{
+        scale: 1;
+    }
+}
+#search-btn{
+    height: 38px;
+}
+#info-selection i {
+    font-size: 18px;
+    color: var(--bleu-marine);
+}
+
+#info-selection span {
+    font-weight: bold;
+    color: var(--bleu-marine);
+}
+.btn-edit, .btn-delete {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    margin-right: 20px;
+    transition: all 0.3s;
+}
+#ajouter_div_flou .ajouter_div form .bouton_ajouter, #modifier_div_flou .modifier_div form .bouton_ajouter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 30px;
+}

@@ -15,9 +15,125 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant2.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud2.css">
-    <script src="${pageContext.request.contextPath}/script/crud.js?v=1.0"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud3.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("DOM complètement chargé");
+
+            const ajouterBtn = document.querySelector('.ajouter');
+            const ajouterDivFlou = document.getElementById('ajouter_div_flou');
+
+            if (ajouterBtn && ajouterDivFlou) {
+                ajouterBtn.addEventListener('click', function () {
+                    ajouterDivFlou.style.display = 'block';
+                });
+            }
+            document.querySelectorAll('.btn_ann').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const parentPopup = btn.closest('.popup, #ajouter_div_flou ,#modifier_div_flou');
+                    if (parentPopup) {
+                        parentPopup.style.display = 'none';
+                    }
+                });
+            });
+
+
+            let currentAction = null;
+            const infoBox = document.getElementById('info-selection');
+            const actionTypeText = document.getElementById('action-type');
+
+            const editTrigger = document.querySelector('.btn-edit--');
+            const deleteTrigger = document.querySelector('.btn-delete--');
+
+            editTrigger.addEventListener('click', () => {
+                currentAction = "edit";
+                actionTypeText.textContent = "modifier";
+                showInfoBox();
+                highlightRowsForSelection();
+            });
+
+            deleteTrigger.addEventListener('click', () => {
+                currentAction = "delete";
+                actionTypeText.textContent = "supprimer";
+                showInfoBox();
+                highlightRowsForSelection();
+            });
+
+            function showInfoBox() {
+                infoBox.style.display = 'flex';
+            }
+
+            function hideInfoBox() {
+                infoBox.style.display = 'none';
+            }
+
+            function highlightRowsForSelection() {
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    row.style.cursor = 'pointer';
+                    row.classList.add('row-selectable');
+                    row.addEventListener('click', handleRowClick);
+                });
+            }
+
+            function handleRowClick(e) {
+                const row = e.currentTarget;
+
+                // Enlève le style et les listeners
+                document.querySelectorAll('tbody tr').forEach(r => {
+                    r.style.cursor = '';
+                    r.classList.remove('row-selectable');
+                    r.removeEventListener('click', handleRowClick);
+                });
+
+                hideInfoBox(); // 👉 cacher le message
+
+                const cells = row.querySelectorAll('td');
+                const matricule = cells[0].textContent;
+
+                if (currentAction === "edit") {
+                    document.getElementById('matricule_mod').value = cells[0].textContent;
+                    document.getElementById('nom_prenom_mod').value = cells[1].textContent;
+                    document.getElementById('sexe_mod').value = cells[2].textContent;
+                    document.getElementById('date_naissance_mod').value = formatDateForInput(cells[3].textContent);
+                    document.getElementById('institution_mod').value = cells[4].textContent;
+                    document.getElementById('mail_mod').value = cells[5].textContent;
+                    document.getElementById('niveau_mod').value = cells[6].textContent;
+
+                    const modifierDivFlou = document.getElementById('modifier_div_flou');
+                    const form = modifierDivFlou.querySelector('form');
+                    form.action = `/projetJSP_war_exploded/etudiants?action=modifier&matricule=${matricule}`;
+                    modifierDivFlou.style.display = 'flex';
+
+                } else if (currentAction === "delete") {
+                    const supDivFlou = document.getElementById('sup_div_flou');
+                    const ouiSupBtn = document.getElementById('oui_sup');
+                    const nonSupBtn = document.getElementById('non_sup');
+
+                    ouiSupBtn.onclick = () => {
+                        window.location.href = `/projetJSP_war_exploded/etudiants?action=supprimer&matricule=${matricule}`;
+                    };
+
+                    nonSupBtn.onclick = () => {
+                        supDivFlou.style.display = 'none';
+                    };
+
+                    supDivFlou.style.display = 'flex';
+                }
+
+                currentAction = null;
+            }
+
+            function formatDateForInput(dateString) {
+                if (!dateString) return '';
+                const parts = dateString.split('-');
+                return `${parts[0]}-${parts[1]}-${parts[2]}`;
+            }
+        });
+
+
+    </script>
 </head>
 <body>
 <header>
@@ -36,14 +152,23 @@
 <div class="recherche">
 
     <div class="search-container">
-        <button class="ajouter">Ajouter<i class="fa fa-plus"></i></button>
+        <button class="btn-edit-- btn-edit" id="btn_ed">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn-delete-- btn-delete" id="btn_del">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+        <button class="ajouter">
+            <i class="fa fa-plus"></i>
+        </button>
         <form action="" method="post">
             <input type="text" placeholder="Rechercher un étudiant..." class="search-input">
-            <button class="search-btn">
+            <button class="search-btn" id="search-btn">
                 <i class="fas fa-search"></i>
             </button>
         </form>
     </div>
+
 
     <div class="search-container2" >
         <select class="filter-select">
@@ -75,6 +200,13 @@
     </div>
 
 </div>
+
+<div id="info-selection" class="info-message" style="display: none;">
+    <i class="fa fa-info-circle"></i>
+    <p>Veuillez sélectionner une ligne à <span id="action-type">modifier</span>.</p>
+</div>
+
+
 <div class="tableau">
     <table>
         <thead>
@@ -86,7 +218,6 @@
             <th>Institution</th>
             <th>Mail</th>
             <th>Niveau</th>
-            <th class="action">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -102,24 +233,16 @@
                     </tr>
                 </c:when>
                 <c:otherwise>
-                    <c:forEach var="etudiant" items="${etudiants}">
-                    <tr>
-                        <td>${etudiant.matricule}</td>
-                        <td>${etudiant.nom}</td>
-                        <td>${etudiant.sexe}</td>
-                        <td>${etudiant.datenais}</td>
-                        <td>${etudiant.institution}</td>
-                        <td>${etudiant.mail}</td>
-                        <td>${etudiant.idniv}</td>
-                        <td class="actions">
-                            <button class="btn-edit" onclick="modifier_etudiant()">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-delete" onclick="supprimer_etudiant()">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
+                    <c:forEach var="etudiant" items="${etudiants}" varStatus="loop">
+                        <tr id="etudiant-${loop.index}">
+                            <td>${etudiant.matricule}</td>
+                            <td>${etudiant.nom}</td>
+                            <td>${etudiant.sexe}</td>
+                            <td>${etudiant.datenais}</td>
+                            <td>${etudiant.institution}</td>
+                            <td>${etudiant.mail}</td>
+                            <td>${etudiant.idniv}</td>
+                        </tr>
                     </c:forEach>
                 </c:otherwise>
             </c:choose>
