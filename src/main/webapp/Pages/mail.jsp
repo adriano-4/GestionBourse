@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>mail</title>
@@ -16,12 +17,12 @@
 <body>
 <header>
     <div class="gauche">
-        <img onclick="window.location.href='../dashboard.jsp'" src="${pageContext.request.contextPath}/image/logo_bourse.png" alt="Logo" width="180">
+        <img onclick="window.location.href='${pageContext.request.contextPath}/dashboard.jsp'" src="${pageContext.request.contextPath}/image/logo_bourse.png" alt="Logo" width="180">
     </div>
     <p class="titre">historique des mails envoyés</p>
     <div class="droite">
         <p>Nom d'utilisateur :<span>Belou</span></p>
-        <button id="déco" onclick="window.location.href='../dashboard.jsp'">
+        <button id="déco" onclick="window.location.href='${pageContext.request.contextPath}/dashboard.jsp'">
             <i class="fa fa-home"></i>
             <span>Acceuil</span>
         </button>
@@ -39,14 +40,15 @@
         </tr>
         </thead>
         <tbody>
+        <c:forEach var="mail" items="${mails}">
         <tr>
-            <td>3011</td>
-            <td>RANDRIANAMBININA Toky Adriano</td>
-            <td>tokyadriano45@gmail.com</td>
-            <td>15/03/2000</td>
+            <td>${mail.matricule}</td>
+            <td>${mail.nom}</td>
+            <td>${mail.mail}</td>
+            <td>${mail.date_envoie}</td>
             <td><i class="fa fa-check"></i></td>
         </tr>
-
+        </c:forEach>
         </tbody>
     </table>
 </div>

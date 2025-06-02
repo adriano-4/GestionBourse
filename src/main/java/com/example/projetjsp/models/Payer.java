@@ -13,6 +13,9 @@ public class Payer {
     private String niveau;
     private int bourse;
     private int equipement;
+    private Date datenais;
+    private String sexe;
+    private String institution;
 
     public Payer() {
     }
@@ -84,5 +87,23 @@ public class Payer {
     }
     public void setEquipement(int equipement) {
         this.equipement = equipement;
+    }
+    public Date getDatenais() {
+        return datenais;
+    }
+    public void setDatenais(Date datenais) {
+        this.datenais = datenais;
+    }
+    public String getSexe() {
+        return sexe;
+    }
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
+    public String getInstitution() {
+        return institution;
+    }
+    public void setInstitution(String institution) {
+        this.institution = institution;
     }
 }

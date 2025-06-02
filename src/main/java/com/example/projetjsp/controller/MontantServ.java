@@ -46,6 +46,7 @@ public class MontantServ extends HttpServlet {
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+        boolean message = false;
         if (action.equals("ajouter")) {
             String idniv = request.getParameter("idniv");
             String niveau = request.getParameter("niveau");
@@ -60,6 +61,16 @@ public class MontantServ extends HttpServlet {
             int montant = Integer.parseInt(request.getParameter("montant"));
             MontantDao.modifierMontant(new Montant(idniv, niveau, statut, montant));
             response.sendRedirect("montants?action=lister");
+        }else if (action.equals("login")) {
+            String username=request.getParameter("username");
+            String password=request.getParameter("password");
+            if(username.equals("admin") && password.equals("12345")){
+                request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+            }else{
+                message = true;
+                request.setAttribute("message", message);
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            }
         }
     }
 }

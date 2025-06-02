@@ -19,18 +19,18 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error("Un ou plusieurs éléments n'ont pas été trouvés");
     }
-    if(btndelete && nonsup && supdivflou) {
-        btndelete.addEventListener('click', function() {
-            supdivflou.style.display = 'flex';
-            console.log("Bouton Ajouter cliqué");
-        });
-
-        nonsup.addEventListener('click', function() {
-            supdivflou.style.display = 'none';
-            console.log("Bouton Annuler cliqué");
-        });
-    } else {
-        console.error("Un ou plusieurs éléments n'ont pas été trouvés");
-    }
+    // if(btndelete && nonsup && supdivflou) {
+    //     btndelete.addEventListener('click', function() {
+    //         supdivflou.style.display = 'flex';
+    //         console.log("Bouton Ajouter cliqué");
+    //     });
+    //
+    //     nonsup.addEventListener('click', function() {
+    //         supdivflou.style.display = 'none';
+    //         console.log("Bouton Annuler cliqué");
+    //     });
+    // } else {
+    //     console.error("Un ou plusieurs éléments n'ont pas été trouvés");
+    // }
 
 });

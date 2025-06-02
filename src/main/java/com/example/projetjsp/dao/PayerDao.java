@@ -36,10 +36,36 @@ public class PayerDao {
         }
         return liste;
     }
+    public static List<Payer> recherchePayements(String rec) {
+        List<Payer> liste = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT e.nom as name,p.idpaye,p.anne_univ,p.date as daty,p.nbr_mois,p.matricule,p.idequipement,eq.montant as equipement,m.montant as bourse,m.niveau FROM etudiant e,montant m,equipements eq,payer p WHERE e.matricule=p.matricule AND e.idniv=m.idniv AND eq.idequipement=p.idequipement AND (e.nom LIKE ? OR e.matricule LIKE ?)")){
+            stmt.setString(1, rec);
+            stmt.setString(2, rec);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Payer p = new Payer();
+                p.setName(rs.getString("name"));
+                p.setIdpaye(rs.getInt("idpaye"));
+                p.setAnne_univ(rs.getString("anne_univ"));
+                p.setDaty(rs.getDate("daty"));
+                p.setNbr_mois(rs.getInt("nbr_mois"));
+                p.setMatricule(rs.getString("matricule"));
+                p.setIdequipement(rs.getInt("idequipement"));
+                p.setEquipement(rs.getInt("equipement"));
+                p.setBourse(rs.getInt("bourse"));
+                p.setNiveau(rs.getString("niveau"));
+                liste.add(p);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return liste;
+    }
     public static List<Payer> getPayementsID(int idpaye) {
         List<Payer> liste = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT p.idpaye,p.anne_univ,p.date as daty,p.nbr_mois,p.matricule,p.idequipement FROM payer WHERE idpaye LIKE ?")){
+             PreparedStatement stmt = conn.prepareStatement("SELECT p.idpaye,p.anne_univ,p.date as daty,p.nbr_mois,p.matricule,p.idequipement FROM payer p WHERE idpaye LIKE ?")){
             stmt.setInt(1, idpaye);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -50,6 +76,33 @@ public class PayerDao {
                 p.setNbr_mois(rs.getInt("nbr_mois"));
                 p.setMatricule(rs.getString("matricule"));
                 p.setIdequipement(rs.getInt("idequipement"));
+                liste.add(p);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return liste;
+    }
+    public static List<Payer> getRecu(String matricule) {
+        List<Payer> liste = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("select p.date as daty,e.matricule,e.nom as name,e.datenais,e.sexe,e.institution,m.niveau,m.montant as bourse," +
+                     "eq.montant as equipement,p.nbr_mois from etudiant e,montant m,equipements eq,payer p " +
+                     "where p.matricule=e.matricule and p.idequipement=eq.idequipement and e.idniv=m.idniv and e.matricule like ?")){
+            stmt.setString(1, matricule);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Payer p = new Payer();
+                p.setDaty(rs.getDate("daty"));
+                p.setMatricule(rs.getString("matricule"));
+                p.setName(rs.getString("name"));
+                p.setDatenais(rs.getDate("datenais"));
+                p.setSexe(rs.getString("sexe"));
+                p.setInstitution(rs.getString("institution"));
+                p.setNiveau(rs.getString("niveau"));
+                p.setBourse(rs.getInt("bourse"));
+                p.setEquipement(rs.getInt("equipement"));
+                p.setNbr_mois(rs.getInt("nbr_mois"));
                 liste.add(p);
             }
         }catch (SQLException e) {

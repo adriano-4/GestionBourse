@@ -35,11 +35,11 @@
         <i class="fas fa-credit-card"></i>
         <h3>Payer</h3>
     </div>
-    <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/Pages/retardataire.jsp'">
+    <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/etudiants?action=retard'">
         <i class="fas fa-clock"></i>
         <h3>Retardataire</h3>
     </div>
-    <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/Pages/mail.jsp'">
+    <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/mails'">
         <i class="fas fa-paper-plane"></i>
         <h3>Mail envoyé</h3>
     </div>

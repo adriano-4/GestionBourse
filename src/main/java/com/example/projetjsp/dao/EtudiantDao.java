@@ -62,7 +62,7 @@ public class EtudiantDao {
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement("SELECT e.matricule, e.nom, e.sexe, e.datenais, e.institution, e.mail, e.idniv " +
                     "FROM etudiant e LEFT JOIN payer p ON e.matricule = p.matricule AND p.anne_univ = '2024-2025' WHERE (p.date IS NULL OR MONTH(p.date) < ?)")){
-            stmt.setInt(1, mois);
+            stmt.setInt(1, mois-1);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -179,7 +179,7 @@ public class EtudiantDao {
     }
     public static void modifierEtudiant(Etudiant e) {
         try(Connection conn = DBConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("UPDATE etudiant SET matricule=?, nom=?, sexe=?, datenais=?, institution=?, mail=? WHERE matricule=?")){
+            PreparedStatement stmt = conn.prepareStatement("UPDATE etudiant SET matricule=?, nom=?, sexe=?, datenais=?, institution=?, mail=?, idniv=? WHERE matricule=?")){
             stmt.setString(1, e.getMatricule());
             stmt.setString(2, e.getNom());
             stmt.setString(3, e.getSexe());

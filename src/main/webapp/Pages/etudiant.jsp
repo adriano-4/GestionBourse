@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/etudiant.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud1.css">
-<%--    <script src="${pageContext.request.contextPath}/script/crud.js?v=1.0"></script>--%>
+    <script src="${pageContext.request.contextPath}/script/crud.js?v=1.0"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
 
 </head>
@@ -308,7 +308,7 @@
                 </select>
             </div>
             <div class="bouton_ajouter">
-                <button type="reset" class="btn_ann">Annuler</button>
+                <a href="/projetJSP_war_exploded/etudiants?action=lister"><button class="btn_ann">Annuler</button></a>
                 <button type="submit" class="btn_aj">Confirmer</button>
             </div>
         </form>

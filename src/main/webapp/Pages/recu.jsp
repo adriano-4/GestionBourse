@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
   <title>recu</title>
@@ -98,25 +99,26 @@
   <div class="exporter_div">
     <button class="exporter">Exporter<i class="fa fa-download"></i></button>
   </div>
+  <c:forEach var="recu" items="${recus}">
   <div class="pdf_recu">
     <div class="date_titre">
-      <p>Aujourd'hui le 25 Avril 2025</p>
+      <p>Aujourd'hui le ${recu.daty}</p>
     </div>
     <div class="info1">
       <p>Matricule : </p>
-      <span>3011</span>
+      <span>${recu.matricule}</span>
     </div>
     <div class="info1">
-      <p>RANDRIANAMBININA Toky Adriano</p>
+      <p>${recu.name}</p>
     </div>
     <div class="info1">
-      <p>Né le 06 janvier 2007</p>
+      <p>Né le ${recu.datenais}</p>
     </div>
     <div class="info1">
       <p>Institution : </p>
-      <span>ENI</span>
+      <span>${recu.institution}</span>
       <p>/ Niveau : </p>
-      <span>L2</span>
+      <span>${recu.niveau}</span>
     </div>
     <div class="tableau_recu">
       <table>
@@ -129,32 +131,33 @@
         <tbody>
         <tr>
           <td>Equipement</td>
-          <td></td>
+          <td>${recu.equipement}</td>
         </tr>
         <tr>
           <td>Janvier</td>
-          <td></td>
+          <td>${recu.bourse}</td>
         </tr>
         <tr>
           <td>Février</td>
-          <td></td>
+          <td>${recu.bourse}</td>
         </tr>
         <tr>
           <td>Mars</td>
-          <td></td>
+          <td>${recu.bourse}</td>
         </tr>
         <tr>
           <td>Total</td>
-          <td></td>
+          <td>${(recu.bourse*recu.nbr_mois)+recu.equipement} Ar</td>
         </tr>
         </tbody>
       </table>
     </div>
     <div class="info1">
       <p>Total Payé : </p>
-      <span>179000</span><span> Ar</span>
+      <span>${(recu.bourse*recu.nbr_mois)+recu.equipement}</span><span> Ar</span>
     </div>
   </div>
+  </c:forEach>
 </div>
 </body>
 </html>

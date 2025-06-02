@@ -132,7 +132,7 @@
 <div id="modifier_div_flou">
     <div class="modifier_div">
         <h2>Modification de montant</h2>
-        <form action="/projetJSP_war_exploded/montants?action=ajouter" method="post">
+        <form action="/projetJSP_war_exploded/montants?action=modifier" method="post">
             <div class="input-group">
                 <label for="idniv">ID Niveau</label>
                 <input type="text" id="idniv_mod" name="idniv" value="${montant.idniv}" required>
@@ -158,8 +158,8 @@
             </div>
 
             <div class="bouton_ajouter">
-                <button type="reset" class="btn_ann">Annuler</button>
-                <button type="submit" class="btn_aj">Ajouter</button>
+                <a href="/projetJSP_war_exploded/montants?action=lister"><button class="btn_ann">Annuler</button></a>
+                <button type="submit" class="btn_aj">Confirmer</button>
             </div>
         </form>
     </div>

@@ -14,14 +14,16 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/crud1.css">
-<%--    <script src="${pageContext.request.contextPath}/script/crudpayer.js?v=1.0"></script>--%>
+    <script src="${pageContext.request.contextPath}/script/crudpayer.js?v=1.0"></script>
 </head>
 <body>
 <header>
     <div class="gauche">
         <img onclick="window.location.href='${pageContext.request.contextPath}/dashboard.jsp'" src="${pageContext.request.contextPath}/image/logo_bourse.png" alt="Logo" width="180">
     </div>
-    <p class="titre">Listes des Payements</p>
+    <a href="/projetJSP_war_exploded/payements?action=lister">
+        <p class="titre">Listes des Payements</p>
+    </a>
     <div class="droite">
         <p>Nom d'utilisateur :<span>Belou</span></p>
         <button id="déco" onclick="window.location.href='${pageContext.request.contextPath}/dashboard.jsp'">
@@ -34,10 +36,12 @@
     <!-- Champ de recherche + bouton -->
     <div class="search-container">
         <button class="ajouter">Ajouter<i class="fa fa-plus"></i></button>
-        <input type="text" placeholder="Rechercher un étudiant..." class="search-input">
-        <button class="search-btn">
-            <i class="fas fa-search"></i>
-        </button>
+        <form action="/projetJSP_war_exploded/payements?action=rechercher" method="post">
+            <input type="text" name="rec" placeholder="Rechercher un étudiant..." class="search-input">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
     </div>
 
     <div class="search-container2" >
@@ -61,6 +65,34 @@
         </tr>
         </thead>
         <tbody>
+<c:choose>
+    <c:when test="${not empty recpayer}">
+        <c:forEach var="payement" items="${recpayer}">
+        <tr>
+            <td>${payement.matricule}</td>
+            <td>${payement.name}</td>
+            <td>${payement.niveau}</td>
+            <td>${payement.anne_univ}</td>
+            <td>${payement.daty}</td>
+            <td>${payement.nbr_mois}</td>
+            <td>${payement.idequipement}</td>
+            <td>${payement.equipement+(payement.bourse*payement.nbr_mois)} Ar</td>
+            <td class="actions">
+                <a href="/projetJSP_war_exploded/payements?action=modform&idpaye=${payement.idpaye}">
+                    <button class="btn-edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </a>
+                <a href="/projetJSP_war_exploded/payements?action=supform&idpaye=${payement.idpaye}">
+                    <button class="btn-delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </a>
+            </td>
+        </tr>
+        </c:forEach>
+    </c:when>
+    <c:otherwise>
         <c:forEach var="payement" items="${payments}">
         <tr>
             <td>${payement.matricule}</td>
@@ -85,6 +117,8 @@
             </td>
         </tr>
         </c:forEach>
+    </c:otherwise>
+</c:choose>
         </tbody>
     </table>
 </div>
@@ -180,13 +214,13 @@
                 <label for="equipement">Equipements</label>
                 <select name="idequipement" id="equipement_mod" required>
                     <option value="${payer.idequipement}">${payer.idequipement}</option>
-                    <option value="">sans</option>
+                    <option value="2">sans</option>
                     <option value="1">avec</option>
                 </select>
             </div>
 
             <div class="bouton_ajouter">
-                <button type="reset" class="btn_ann">Annuler</button>
+                <a href="/projetJSP_war_exploded/payements?action=lister"><button class="btn_ann">Annuler</button></a>
                 <button type="submit" class="btn_aj">Confirmer</button>
             </div>
         </form>

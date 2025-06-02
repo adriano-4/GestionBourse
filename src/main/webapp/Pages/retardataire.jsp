@@ -35,10 +35,10 @@
 <div class="recherche">
     <!-- Champ de recherche + bouton -->
     <div class="search-container">
-        <input type="text" placeholder="Rechercher un étudiant..." class="search-input">
-        <button class="search-btn">
-            <i class="fas fa-search"></i>
-        </button>
+<%--        <input type="text" placeholder="Rechercher un étudiant..." class="search-input">--%>
+<%--        <button class="search-btn">--%>
+<%--            <i class="fas fa-search"></i>--%>
+<%--        </button>--%>
     </div>
 
     <div class="search-container2" >
@@ -63,6 +63,7 @@
             <th>institution</th>
             <th>Mail</th>
             <th>Niveau</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -75,6 +76,13 @@
             <td>${retardataire.institution}</td>
             <td>${retardataire.mail}</td>
             <td>${retardataire.idniv}</td>
+            <td>
+                <a href="/projetJSP_war_exploded/mails?action=envoyer&matricule=${retardataire.matricule}&mail=${retardataire.mail}&nom=${retardataire.nom}">
+                    <button class="btn-edit">
+                        <i class="fa fa-paper-plane"></i>
+                    </button>
+                </a>
+            </td>
         </tr>
         </c:forEach>
         </tbody>

@@ -43,6 +43,11 @@ public class PayerServ extends HttpServlet {
             int idpaye = Integer.parseInt(request.getParameter("idpaye"));
             PayerDao.supprimerPayer(idpaye);
             response.sendRedirect("payements?action=lister");
+        }else if (action.equals("recu")){
+            String matricule = request.getParameter("matricule");
+            List<Payer> recu = PayerDao.getRecu(matricule);
+            request.setAttribute("recus", recu);
+            request.getRequestDispatcher("/Pages/recu.jsp").forward(request, response);
         }
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -56,7 +61,7 @@ public class PayerServ extends HttpServlet {
             String matricule = request.getParameter("matricule");
             int idequipement = Integer.parseInt(request.getParameter("idequipement"));
             PayerDao.ajouterPayement(new Payer(idpaye,anne_univ,daty,nbr_mois,matricule,idequipement));
-            response.sendRedirect("payements?action=lister");
+            response.sendRedirect("payements?action=recu&matricule="+matricule);
         }else if (action.equals("modifier")) {
             int idpaye = Integer.parseInt(request.getParameter("idpaye"));
             String anne_univ = request.getParameter("anne_univ");
@@ -66,6 +71,11 @@ public class PayerServ extends HttpServlet {
             int idequipement = Integer.parseInt(request.getParameter("idequipement"));
             PayerDao.modifierPayer(new Payer(idpaye,anne_univ,daty,nbr_mois,matricule,idequipement));
             response.sendRedirect("payements?action=lister");
+        }else if (action.equals("rechercher")){
+            String rec = request.getParameter("rec");
+            List<Payer> recpayer = PayerDao.recherchePayements(rec);
+            request.setAttribute("recpayer", recpayer);
+            request.getRequestDispatcher("/Pages/payer.jsp").forward(request, response);
         }
     }
 }

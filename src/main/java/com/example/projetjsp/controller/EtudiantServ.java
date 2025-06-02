@@ -3,6 +3,7 @@ package com.example.projetjsp.controller;
 import java.io.IOException;
 import java.util.List;
 import java.util.Date;
+import java.time.LocalDate;
 import com.example.projetjsp.models.Etudiant;
 import com.example.projetjsp.dao.EtudiantDao;
 import javax.servlet.http.HttpServlet;
@@ -39,6 +40,11 @@ public class EtudiantServ extends HttpServlet {
             String matricule = request.getParameter("matricule");
             EtudiantDao.supprimerEtudiant(matricule);
             response.sendRedirect("etudiants?action=lister");
+        }else if(action.equals("retard")){
+            int mois = LocalDate.now().getMonthValue();
+            List<Etudiant> listeretard = EtudiantDao.getRetardataires(mois);
+            request.setAttribute("retardataires", listeretard);
+            request.getRequestDispatcher("/Pages/retardataire.jsp").forward(request, response);
         }
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

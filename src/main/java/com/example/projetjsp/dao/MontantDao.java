@@ -33,7 +33,7 @@ public class MontantDao {
     public static List<Montant> getMontantsID(String idniv){
         List<Montant> liste = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM montant")){
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM montant WHERE idniv=?")){
             stmt.setString(1, idniv);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
