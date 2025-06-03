@@ -63,6 +63,7 @@
             <th>institution</th>
             <th>Mail</th>
             <th>Niveau</th>
+            <th>Retards</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -76,6 +77,14 @@
             <td>${retardataire.institution}</td>
             <td>${retardataire.mail}</td>
             <td>${retardataire.idniv}</td>
+            <c:choose>
+                <c:when test="${retardataire.institution eq 'ENI'}">
+                    <td>14 j</td>
+                </c:when>
+                <c:otherwise>
+                    <td>19 j</td>
+                </c:otherwise>
+            </c:choose>
             <td>
                 <a href="/projetJSP_war_exploded/mails?action=envoyer&matricule=${retardataire.matricule}&mail=${retardataire.mail}&nom=${retardataire.nom}">
                     <button class="btn-edit">

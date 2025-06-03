@@ -40,8 +40,8 @@ public class PayerDao {
         List<Payer> liste = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT e.nom as name,p.idpaye,p.anne_univ,p.date as daty,p.nbr_mois,p.matricule,p.idequipement,eq.montant as equipement,m.montant as bourse,m.niveau FROM etudiant e,montant m,equipements eq,payer p WHERE e.matricule=p.matricule AND e.idniv=m.idniv AND eq.idequipement=p.idequipement AND (e.nom LIKE ? OR e.matricule LIKE ?)")){
-            stmt.setString(1, rec);
-            stmt.setString(2, rec);
+            stmt.setString(1, "%"+rec+"%");
+            stmt.setString(2, "%"+rec+"%");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Payer p = new Payer();
