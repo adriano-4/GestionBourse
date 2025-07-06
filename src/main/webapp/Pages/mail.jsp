@@ -21,7 +21,7 @@
     </div>
     <p class="titre">historique des mails envoyés</p>
     <div class="droite">
-        <p>Nom d'utilisateur :<span>Belou</span></p>
+        <p>Nom d'utilisateur :<span>admin</span></p>
         <button id="déco" onclick="window.location.href='${pageContext.request.contextPath}/dashboard.jsp'">
             <i class="fa fa-home"></i>
             <span>Acceuil</span>

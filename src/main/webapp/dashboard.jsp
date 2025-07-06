@@ -15,7 +15,7 @@
     </div>
 
     <div class="droite">
-        <p>Nom d'utilisateur :<span>Belou</span></p>
+        <p>Nom d'utilisateur :<span>admin</span></p>
         <button id="déco">
             <i class="fa fa-sign-out"></i>
             <span>Déconnecter</span>
@@ -42,6 +42,10 @@
     <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/mails'">
         <i class="fas fa-paper-plane"></i>
         <h3>Mail envoyé</h3>
+    </div>
+    <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/javas'">
+        <i class="fas fa-box"></i>
+        <h3>Tech Java projet</h3>
     </div>
 </div>
 <div id="cont">

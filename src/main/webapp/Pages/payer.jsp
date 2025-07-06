@@ -25,7 +25,7 @@
         <p class="titre">Listes des Payements</p>
     </a>
     <div class="droite">
-        <p>Nom d'utilisateur :<span>Belou</span></p>
+        <p>Nom d'utilisateur :<span>admin</span></p>
         <button id="déco" onclick="window.location.href='${pageContext.request.contextPath}/dashboard.jsp'">
             <i class="fa fa-home"></i>
             <span>Acceuil</span>
@@ -220,7 +220,7 @@
             </div>
 
             <div class="bouton_ajouter">
-                <a href="/projetJSP_war_exploded/payements?action=lister"><button class="btn_ann">Annuler</button></a>
+                <a href="/projetJSP_war_exploded/payements?action=lister"><button type="button" class="btn_ann">Annuler</button></a>
                 <button type="submit" class="btn_aj">Confirmer</button>
             </div>
         </form>

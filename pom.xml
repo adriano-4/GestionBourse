@@ -24,6 +24,11 @@
           <version>2.0.1</version> <!-- ou autre version récente -->
       </dependency>
       <dependency>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+          <version>2.10.1</version> <!-- Version la plus récente (vérifiez sur Maven Central) -->
+      </dependency>
+      <dependency>
           <groupId>org.webjars</groupId>
           <artifactId>font-awesome</artifactId>
           <version>6.4.2</version>
@@ -37,6 +42,11 @@
           <groupId>mysql</groupId>
           <artifactId>mysql-connector-java</artifactId>
           <version>8.0.33</version>
+      </dependency>
+      <dependency>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+          <version>20231013</version>
       </dependency>
       <dependency>
           <groupId>javax.servlet</groupId>
