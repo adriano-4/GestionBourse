@@ -2,6 +2,7 @@ package com.example.projetjsp.dao;
 
 import com.example.projetjsp.models.Mail;
 import com.example.projetjsp.utils.DBConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,16 +11,17 @@ import java.sql.Statement;
 import java.util.List;
 import java.sql.Date;
 import java.util.ArrayList;
-import jakarta.mail.*;
-import jakarta.mail.internet.*;
+
+import javax.mail.*;
+import javax.mail.internet.*;
 import java.util.Properties;
 
 public class MailDao {
-    public static List<Mail> getMails(){
+    public static List<Mail> getMails() {
         List<Mail> liste = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT e.matricule,e.nom,e.mail,m.date_envoie FROM etudiant e,mail m WHERE e.matricule=m.matricule")){
+             ResultSet rs = stmt.executeQuery("SELECT e.matricule,e.nom,e.mail,m.date_envoie FROM etudiant e,mail m WHERE e.matricule=m.matricule")) {
 
             while (rs.next()) {
                 Mail m = new Mail();
@@ -29,14 +31,15 @@ public class MailDao {
                 m.setDate_envoie(rs.getDate("date_envoie"));
                 liste.add(m);
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return liste;
     }
-    public static void ajouterMail(Mail m){
-        try(Connection conn = DBConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO mail (date_envoie, matricule) VALUES (?, ?)")){
+
+    public static void ajouterMail(Mail m) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("INSERT INTO mail (date_envoie, matricule) VALUES (?, ?)")) {
             stmt.setDate(1, new java.sql.Date(m.getDate_envoie().getTime()));
             stmt.setString(2, m.getMatricule());
             stmt.executeUpdate();
@@ -44,6 +47,7 @@ public class MailDao {
             ex.printStackTrace();
         }
     }
+
     public static void envoieMail(String to, String objet, String contenus) throws MessagingException {
         final String from = "ririniony@gmail.com";
         final String password = "papl ulcq zoyx ebeb";

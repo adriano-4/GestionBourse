@@ -56,7 +56,7 @@
                     url = 'https://' + url;
                 }
 
-                const linkText = `[lien]${url}[/lien|${nom}]`;
+                const linkText = `<a href="${url}" target="_blank" style="color: #007bff; text-decoration: underline;">${nom}</a>`;
 
                 const messageInput = $messageInput[0];
                 const startPos = messageInput.selectionStart;
@@ -70,6 +70,7 @@
 
                 reinitialiserFormulaireLien();
             }
+
             function reinitialiserFormulaireLien() {
                 $nomInput.val('');
                 $lienInput.val('');
@@ -140,12 +141,13 @@
                 $('.destinataire-input').val('');
                 $('.objet-input').val('');
                 $('.message-input').val('');
-
+                const fileInput = document.getElementById('file-upload');
+                fileInput.value = '';
+                $('.fichier_div').empty();
                 $('.destinataire-input').focus();
             });
 
 
-            // Gestion de la suppression des conversations
             const confirmation_sup = document.getElementById("confirmation_sup");
             $(document).on('click', '.bt_sup', function() {
                 const deleteBtn = $(this);
@@ -193,59 +195,62 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const envoyerBtn = document.getElementById("envoyer");
-            const mail_conf = document.getElementById("mail_conf");
-            const confirmation_envoi = document.getElementById("confirmation_envoi");
             document.getElementById("envoyer").addEventListener("click", function () {
                 const destinataire = document.getElementById("destinataire").value;
                 const objet = document.getElementById("objet").value;
                 const message = document.getElementById("message").value;
+                const fileInput = document.getElementById("file-upload");
 
                 if (!destinataire || !objet || !message) {
-                    confirmation_envoi.style.display="flex";
-                    setTimeout(function() {
-                        confirmation_envoi.style.display="none";
+                    document.getElementById("confirmation_envoi").style.display = "flex";
+                    setTimeout(() => {
+                        document.getElementById("confirmation_envoi").style.display = "none";
                     }, 3000);
                     return;
                 }
 
+                const formData = new FormData();
+                formData.append("destinataire", destinataire);
+                formData.append("objet", objet);
+                formData.append("message", message);
+
+                if (fileInput.files.length > 0) {
+                    for (let i = 0; i < fileInput.files.length; i++) {
+                        formData.append("fichiers", fileInput.files[i]);
+                    }
+                }
+
+                const envoyerBtn = document.getElementById("envoyer");
                 envoyerBtn.disabled = true;
                 envoyerBtn.innerHTML = `Envoi... <i class="fas fa-spinner fa-spin"></i>`;
 
+                console.log(destinataire);
+                console.log(objet);
+                console.log(message);
+                console.log(fileInput.files);
+
                 fetch("/projetJSP_war_exploded/javas", {
                     method: "POST",
-                    headers: {
-                       "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        destinataire,
-                       objet,
-                        message
-                    })
+                    body: formData
                 })
                 .then(response => {
                     if (response.ok) {
-                        //alert("Mail envoyé avec succès !");
-                        mail_conf.style.display = "flex";
-                        setTimeout(function() {
-                            mail_conf.style.display = "none";
+                        document.getElementById("mail_conf").style.display = "flex";
+                        setTimeout(() => {
+                            document.getElementById("mail_conf").style.display = "none";
                             location.reload();
                         }, 2000);
                     } else {
-                        //alert("Erreur lors de l'envoi du mail.");
                         envoyerBtn.disabled = false;
                         envoyerBtn.innerHTML = `Envoyer <i class="fas fa-paper-plane"></i>`;
                     }
                 })
                 .catch(error => {
                     console.error("Erreur réseau :", error);
-                    //alert("Erreur de connexion au serveur.");
                     envoyerBtn.disabled = false;
                     envoyerBtn.innerHTML = `Envoyer <i class="fas fa-paper-plane"></i>`;
-
                 });
             });
-
         });
     </script>
     <script>
@@ -258,9 +263,16 @@
                     const fichierElement = document.createElement('div');
                     fichierElement.className = 'fichier-selectionne';
 
+                    const fileInfoContainer = document.createElement('div');
+                    fileInfoContainer.className = 'file-info-container';
+
                     const nomFichier = document.createElement('span');
                     nomFichier.className = 'nom-fichier';
                     nomFichier.textContent = file.name;
+
+                    const tailleFichier = document.createElement('span');
+                    tailleFichier.className = 'taille-fichier';
+                    tailleFichier.textContent = formatFileSize(file.size);
 
                     const btnSupprimer = document.createElement('button');
                     btnSupprimer.className = 'btn-supprimer';
@@ -268,26 +280,26 @@
                     btnSupprimer.dataset.index = index;
                     btnSupprimer.onclick = function() {
                         const newFiles = Array.from(this.files).filter((_, i) => i != index);
-
                         const dataTransfer = new DataTransfer();
                         newFiles.forEach(f => dataTransfer.items.add(f));
                         this.files = dataTransfer.files;
-
                         this.dispatchEvent(new Event('change'));
                     }.bind(this);
 
-                    fichierElement.appendChild(nomFichier);
+                    fileInfoContainer.appendChild(nomFichier);
+                    fileInfoContainer.appendChild(tailleFichier);
+                    fichierElement.appendChild(fileInfoContainer);
                     fichierElement.appendChild(btnSupprimer);
                     fichiersDiv.appendChild(fichierElement);
                 });
             });
 
-           /* function formatTailleFichier(octets) {
-                if (octets === 0) return '0 Bytes';
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
                 const k = 1024;
                 const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(octets) / Math.log(k));
-                return parseFloat((octets / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
             }
         });
     </script>
@@ -311,6 +323,7 @@
             <tr>
                 <th>Expéditeur</th>
                 <th>Destinataire</th>
+                <th>PJ</th>
                 <th>Message</th>
                 <th>Date</th>
             </tr>
@@ -320,6 +333,7 @@
                 <tr data-id="${h.id}">
                     <td>${h.expediteur}</td>
                     <td>${h.destinataire}</td>
+                    <td></td>
                     <td><span id="td_objet">${h.objet} - </span><span id="td_mess">${h.message}</span></td>
                     <td>
                         <span class="date-text">

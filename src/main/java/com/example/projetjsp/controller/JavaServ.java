@@ -1,38 +1,39 @@
 package com.example.projetjsp.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.Date;
+import java.io.InputStream;
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Properties;
 import java.util.List;
-import java.util.stream.Collectors;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.annotation.WebServlet;
+import java.util.Properties;
+import javax.activation.DataHandler;
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.servlet.http.Part;
 
-import com.google.gson.JsonParser;
-import jakarta.mail.*;
-import jakarta.mail.internet.*;
 import com.example.projetjsp.dao.JavaDao;
+import com.example.projetjsp.models.FichierJoint;
 import com.example.projetjsp.models.Java;
-import com.google.gson.JsonObject;
-import org.json.JSONObject;
 
 @WebServlet("/javas")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024,    // 1MB
+        maxFileSize = 1024 * 1024 * 10,     // 10MB
+        maxRequestSize = 1024 * 1024 * 50   // 50MB
+)
 public class JavaServ extends HttpServlet {
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
     private static final String EMAIL_FROM = "tokyadriano45@gmail.com";
     private static final String EMAIL_PASSWORD = "mtql pilm vctv obem";
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String action = request.getParameter("action");
-
         if (action == null || action.equals("lister")) {
             List<Java> liste = JavaDao.getTousHistorique();
             request.setAttribute("javas", liste);
@@ -41,66 +42,91 @@ public class JavaServ extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        BufferedReader reader = request.getReader();
-        StringBuilder jsonBuffer = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            jsonBuffer.append(line);
-        }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
 
-        JsonObject json = JsonParser.parseString(jsonBuffer.toString()).getAsJsonObject();
-        String destinataire = json.get("destinataire").getAsString();
-        String objet = json.get("objet").getAsString();
-        String message = json.get("message").getAsString();
+            String destinataire = request.getParameter("destinataire");
+            String objet = request.getParameter("objet");
+            String messageTexte = request.getParameter("message");
 
+            try {
+                Properties props = new Properties();
+                props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+                props.put("mail.smtp.ssl.trust", SMTP_HOST);
+                props.put("mail.smtp.auth", "true");
+                props.put("mail.smtp.starttls.enable", "true");
+                props.put("mail.smtp.host", SMTP_HOST);
+                props.put("mail.smtp.port", SMTP_PORT);
 
-        try {
-            Properties props = new Properties();
-            props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-            props.put("mail.smtp.ssl.trust", SMTP_HOST);
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.host", SMTP_HOST);
-            props.put("mail.smtp.port", SMTP_PORT);
+                Session session = Session.getInstance(props, new Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(EMAIL_FROM, EMAIL_PASSWORD);
+                    }
+                });
 
-            Session session = Session.getInstance(props, new Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(EMAIL_FROM, EMAIL_PASSWORD);
+                MimeMessage message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(EMAIL_FROM));
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinataire));
+                message.setSubject(objet);
+
+                Multipart multipart = new MimeMultipart();
+
+                MimeBodyPart messageBodyPart = new MimeBodyPart();
+                messageBodyPart.setContent(messageTexte, "text/plain; charset=utf-8");
+                multipart.addBodyPart(messageBodyPart);
+
+                for (Part part : request.getParts()) {
+                    if (part.getName().equals("fichiers") && part.getSize() > 0) {
+                        MimeBodyPart filePart = new MimeBodyPart();
+                        filePart.setFileName(MimeUtility.encodeText(part.getSubmittedFileName()));
+                        filePart.setDataHandler(new DataHandler(new ByteArrayDataSource(
+                                part.getInputStream(),
+                                part.getContentType())));
+                        multipart.addBodyPart(filePart);
+
+                    }
                 }
-            });
+                message.setContent(multipart);
 
-            session.setDebug(true);
+                Transport.send(message);
 
-            Message mimeMessage = new MimeMessage(session);
-            mimeMessage.setFrom(new InternetAddress(EMAIL_FROM));
-            mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinataire));
-            mimeMessage.setSubject(objet);
-            mimeMessage.setText(message);
+                Java historique = new Java();
+                historique.setExpediteur(EMAIL_FROM);
+                historique.setDestinataire(destinataire);
+                historique.setObjet(objet);
+                historique.setMessage(messageTexte);
+                historique.setDate(new Timestamp(System.currentTimeMillis()));
 
-            Transport.send(mimeMessage);
+                boolean success = JavaDao.ajouterHistorique(historique);
 
-            Java historique = new Java();
-            historique.setExpediteur(EMAIL_FROM);
-            historique.setDestinataire(destinataire);
-            historique.setObjet(objet);
-            historique.setMessage(message);
-            historique.setDate(new Timestamp(System.currentTimeMillis()));
+                if (success) {
+                    int mailId = JavaDao.getLastInsertedId();
 
-            boolean success = JavaDao.ajouterHistorique(historique);
+                    if (mailId > 0) {
+                        for (Part part : request.getParts()) {
+                            if (part.getName().equals("fichiers") && part.getSize() > 0) {
+                                FichierJoint fichier = new FichierJoint();
+                                fichier.setNom(part.getSubmittedFileName());
+                                fichier.setTaille(part.getSize());
+                                fichier.setTypeMime(part.getContentType());
 
-            if (success) {
-                response.setStatus(HttpServletResponse.SC_OK);
-            } else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erreur lors de l'enregistrement.");
+
+                                JavaDao.ajouterFichier(mailId, fichier);
+                            }
+                        }
+                    }
+                } else {
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erreur lors de l'enregistrement.");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Erreur d'envoi d'email: " + e.getMessage());
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "Erreur d'envoi d'email: " + e.getMessage());
-        }
     }
+
+    @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -111,7 +137,7 @@ public class JavaServ extends HttpServlet {
                 sb.append(line);
             }
 
-            JSONObject json = new JSONObject(sb.toString());
+            org.json.JSONObject json = new org.json.JSONObject(sb.toString());
             int mailId = json.getInt("id");
 
             boolean success = JavaDao.supprimerHistorique(mailId);

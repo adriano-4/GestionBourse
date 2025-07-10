@@ -23,26 +23,29 @@
     </div>
 </header>
 <div id="navigation">
-    <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/etudiants'">
-        <i class="fas fa-user-graduate"></i>
-        <h3>Etudiant</h3>
-    </div>
-    <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/montants'">
-        <i class="fas fa-money-bill-wave"></i>
-        <h3>Montant</h3>
-    </div>
-    <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/payements'">
-        <i class="fas fa-credit-card"></i>
-        <h3>Payer</h3>
-    </div>
-    <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/etudiants?action=retard'">
-        <i class="fas fa-clock"></i>
-        <h3>Retardataire</h3>
-    </div>
-    <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/mails'">
-        <i class="fas fa-paper-plane"></i>
-        <h3>Mail envoyé</h3>
-    </div>
+    <!--
+<div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/etudiants'">
+    <i class="fas fa-user-graduate"></i>
+    <h3>Etudiant</h3>
+</div>
+<div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/montants'">
+    <i class="fas fa-money-bill-wave"></i>
+    <h3>Montant</h3>
+</div>
+<div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/payements'">
+    <i class="fas fa-credit-card"></i>
+    <h3>Payer</h3>
+</div>
+<div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/etudiants?action=retard'">
+    <i class="fas fa-clock"></i>
+    <h3>Retardataire</h3>
+</div>
+<div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/mails'">
+    <i class="fas fa-paper-plane"></i>
+    <h3>Mail envoyé</h3>
+</div>
+-->
+
     <div class="nav" onclick="window.location.href='${pageContext.request.contextPath}/javas'">
         <i class="fas fa-box"></i>
         <h3>Tech Java projet</h3>

@@ -90,7 +90,7 @@ td{
 }
 th{
     color: rgba(0, 0, 0, 0.47);
-
+    white-space: nowrap;
 }
 table tr:hover{
     box-shadow: 0 0 5px rgba(0,0,0,0.3);
@@ -187,7 +187,7 @@ table #td_mess{
     border-bottom: 1px solid rgba(128, 128, 128, 0.3);
 }
 .message .message_ecrit{
-    height: 400px;
+    height: 350px;
 }
 
 .input {
@@ -414,7 +414,7 @@ box-shadow: none;
     border: 1px solid rgba(128, 128, 128, 0.3);
     position: relative;
     top: 5px;
-    border-radius: 10px;
+    border-radius: 60px;
     display: flex;
     align-items: center;
     transition: all 0.3s;
@@ -424,12 +424,15 @@ box-shadow: none;
     display: flex;
     align-items: center;
     background-color: #f0f0f0;
-    border-radius: 4px;
+    border-radius: 60px;
     height: 50px;
     margin: 5px;
     transition: all 0.3s;
     cursor: pointer;
     animation: fichsel 0.5s;
+}
+.fichier-selectionne:hover{
+    background-color: #e4e4e4;
 }
 @keyframes fichsel {
     from{
@@ -444,12 +447,22 @@ box-shadow: none;
     cursor: pointer;
     transition: all 0.3s;
     font-size: 13px;
-    margin: 0 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 200px;
     display: inline-block;
+}
+.taille-fichier{
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.52);
+}
+.file-info-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding-left: 20px;
+    padding-right: 10px;
 }
 
 .btn-supprimer {
@@ -457,7 +470,7 @@ box-shadow: none;
     border: none;
     cursor: pointer;
     font-size: 15px;
-    margin-right: 7px;
+    margin-right: 12px;
     color: #ff4444;
     padding: 0 5px;
 }

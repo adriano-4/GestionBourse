@@ -1,5 +1,6 @@
 package com.example.projetjsp.dao;
 
+import com.example.projetjsp.models.FichierJoint;
 import com.example.projetjsp.models.Java;
 import com.example.projetjsp.utils.DBConnection;
 
@@ -46,6 +47,43 @@ public class JavaDao {
             pstmt.setTimestamp(5, mail.getDate());
 
             int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static int getLastInsertedId() {
+        String sql = "SELECT LAST_INSERT_ID()";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return -1;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public static boolean ajouterFichier(int mailId, FichierJoint fichier) {
+        String sql = "INSERT INTO fichiers_joints (mail_id, nom_fichier, taille, type_mime) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, mailId);
+            ps.setString(2, fichier.getNom());
+            ps.setLong(3, fichier.getTaille());
+            ps.setString(4, fichier.getTypeMime());
+
+            int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
 
         } catch (SQLException e) {
