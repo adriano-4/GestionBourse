@@ -13,15 +13,15 @@ public class DBConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("✅ Connexion réussie à la base de données !");
+            System.out.println("Connexion réussie à la base de données !");
             return conn;
         } catch (ClassNotFoundException e) {
-            System.out.println("❌ Pilote JDBC non trouvé !");
+            System.out.println("Pilote JDBC non trouvé !");
             e.printStackTrace();
         } catch (SQLException e) {
-            System.out.println("❌ Erreur de connexion à la base !");
+            System.out.println("Erreur de connexion à la base !");
             e.printStackTrace();
-            throw e; // Propager l'erreur si besoin
+            throw e;
         }
         return null;
     }

@@ -21,9 +21,9 @@ import com.example.projetjsp.models.Java;
 
 @WebServlet("/javas")
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024,    // 1MB
-        maxFileSize = 1024 * 1024 * 10,     // 10MB
-        maxRequestSize = 1024 * 1024 * 50   // 50MB
+        fileSizeThreshold = 1024 * 1024,     // 1MB
+        maxFileSize = 1024 * 1024 * 100,    // 10MB
+        maxRequestSize = 1024 * 1024 * 50  //  50MB
 )
 public class JavaServ extends HttpServlet {
     private static final String SMTP_HOST = "smtp.gmail.com";

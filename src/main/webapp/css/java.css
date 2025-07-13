@@ -1,3 +1,6 @@
+body{
+    overflow: hidden;
+}
 .bas{
     width: 100%;
     height: 90%;
@@ -6,7 +9,7 @@
     display: flex;
 }
 .historique{
-    width: 65%;
+    width: 100%;
     overflow: auto;
     max-height: 96%;
     border: none;
@@ -16,6 +19,7 @@
     height: 100%;
 box-shadow: -5px 0 5px rgba(0, 0, 0, 0.06);
     border-top-left-radius: 20px;
+    display: none;
 }
 .historique h1{
     color: var(--bleu-marine);
@@ -418,6 +422,10 @@ box-shadow: none;
     display: flex;
     align-items: center;
     transition: all 0.3s;
+    overflow: auto;
+}
+.message .fichier_div::-webkit-scrollbar{
+    display: none;
 }
 
 .fichier-selectionne {
@@ -477,4 +485,80 @@ box-shadow: none;
 
 .btn-supprimer:hover {
     color: #cc0000;
+}
+
+#nouveau_mess_bouton{
+    position: absolute;
+    bottom: 40px;
+    right: 50px;
+    height: 50px;
+    border-radius: 50px;
+    color: var(--bleu-marine);
+    background-color: rgba(0, 0, 255, 0.04);
+    font-size: 13px;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.22);
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 1000;
+    animation: btn_nouv 0.5s;
+}
+@keyframes btn_nouv {
+    from{
+        scale: 0.2;
+    }
+    to{
+        scale: 1;
+    }
+}
+#nouveau_mess_bouton:hover{
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.22);
+    transform: translateY(-5px);
+}
+#cacher{
+    background: transparent;
+    font-size: 20px;
+    margin-left: 40px;
+    border: none;
+    color: rgba(0, 0, 0, 0.55);
+    cursor: pointer;
+}
+@keyframes nouv {
+    from{
+        transform: translateX(200px);
+    }
+    to{
+        transform: translateX(0);
+    }
+}
+.total{
+    display: none;
+    align-items: center;
+    gap: 10px;
+    height: 50px;
+    transform: translateX(20px);
+}
+.total .bar{
+    width: 200px;
+    height: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    transform: translateY(1px);
+    border-radius: 50px;
+    overflow: hidden;
+}
+.total .bar .bar1{
+    height: 100%;
+    background: var(--bleu-marine);
+}
+.texte_bar{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
 }

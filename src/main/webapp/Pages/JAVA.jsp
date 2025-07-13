@@ -26,6 +26,7 @@
             const $lienInput = $('.lien_inp');
             const $appliquerBtn = $('#appliquerBtn');
             const $messageInput = $('.message-input');
+            const $nouveau = $('#nouveau');
 
             $lienContainer.hide();
 
@@ -41,6 +42,46 @@
                     'display': `flex`,
                 });
             }
+
+            $('#cacher').click(function (e){
+                nettoyer();
+                $nouveau.css({
+                    'display': `none`,
+                });
+                $('#nouveau_mess_bouton').css({
+                    'display': `flex`,
+                });
+                $('.historique').css({
+                    'width': `100%`,
+                    'transition': `all 0.4s`,
+                });
+
+            });
+
+            function nettoyer(){
+                $('.destinataire-input').val('');
+                $('.objet-input').val('');
+                $('.message-input').val('');
+                const fileInput = document.getElementById('file-upload');
+                fileInput.value = '';
+                $('.fichier_div').empty();
+                $('.destinataire-input').focus();
+                document.querySelector('.total').style.display = "none";
+            };
+
+            $('#nouveau_mess_bouton').click(function (e){
+                $nouveau.css({
+                    'display': `block`,
+                    'animation': `nouv 0.4s`,
+                });
+                $('#nouveau_mess_bouton').css({
+                    'display': `none`,
+                });
+                $('.historique').css({
+                   'width': `65%`,
+                    'transition': `all 0.4s`,
+                });
+            });
 
             $appliquerBtn.click(function() {
                 insererLien();
@@ -138,13 +179,7 @@
             });
 
             $('#btn-sup').click(function () {
-                $('.destinataire-input').val('');
-                $('.objet-input').val('');
-                $('.message-input').val('');
-                const fileInput = document.getElementById('file-upload');
-                fileInput.value = '';
-                $('.fichier_div').empty();
-                $('.destinataire-input').focus();
+                nettoyer();
             });
 
 
@@ -255,11 +290,18 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            const taille_total = document.getElementById("taille_total");
+
             document.getElementById('file-upload').addEventListener('change', function(e) {
                 const fichiersDiv = document.querySelector('.fichier_div');
                 fichiersDiv.innerHTML = '';
+                let taille = 0;
+                let pourc = 0;
+
+                document.querySelector('.total').style.display = "flex";
 
                 Array.from(this.files).forEach((file, index) => {
+                    taille += file.size;
                     const fichierElement = document.createElement('div');
                     fichierElement.className = 'fichier-selectionne';
 
@@ -284,6 +326,11 @@
                         newFiles.forEach(f => dataTransfer.items.add(f));
                         this.files = dataTransfer.files;
                         this.dispatchEvent(new Event('change'));
+                        if (this.files.length > 0) {
+                            document.querySelector('.total').style.display = "flex";
+                        } else {
+                            document.querySelector('.total').style.display = "none";
+                        }
                     }.bind(this);
 
                     fileInfoContainer.appendChild(nomFichier);
@@ -292,7 +339,16 @@
                     fichierElement.appendChild(btnSupprimer);
                     fichiersDiv.appendChild(fichierElement);
                 });
+                taille_total.innerHTML = formatFileSize(taille);
+                pourc = pourcentage(taille);
+                console.log(pourc);
+                document.querySelector(".bar1").style.width = pourc + "%";
             });
+
+            function pourcentage(pr){
+                const r = pr/1024;
+                return Math.min((r / 102400) * 100, 100);
+            }
 
             function formatFileSize(bytes) {
                 if (bytes === 0) return '0 Bytes';
@@ -348,10 +404,10 @@
             </tbody>
         </table>
     </div>
-    <div class="nouveau">
+    <div class="nouveau" id="nouveau">
         <div class="entete">
             <h1><i class="fas fa-pen"> </i> Nouveau messages :</h1>
-            <p class="date"><%= dateAujourdhui %></p>
+            <p class="date"><%= dateAujourdhui %><span><button id="cacher">x</button></span></p>
         </div>
 
         <div class="message">
@@ -366,6 +422,14 @@
             </div>
             <div class="fichier_div">
 
+            </div>
+            <div class="total">
+                <div class="bar">
+                    <div class="bar1"></div>
+                </div>
+                <div class="texte_bar">
+                    <p>Total :</p><span id="taille_total"></span><span>/100 Mo</span>
+                </div>
             </div>
         </div>
 
@@ -416,5 +480,8 @@
         <p>Envoi impossible (Renseignez tous les champs)</p>
     </div>
 </div>
+<button id="nouveau_mess_bouton">
+    <i class="fas fa-pen"> </i> Nouveau messages
+</button>
 </body>
 </html>
